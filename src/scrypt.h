@@ -44,9 +44,7 @@ static inline void le32enc(void *pp, uint32_t x)
 }
 #endif
 
-void fastcyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd);
-
-void cyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd);
+void bcyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd);
 
 bool testequality(uint32_t cc,uint32_t oldcc,uint32_t dd,uint32_t olddd);
 uint32_t hashspincc(uint32_t x);
