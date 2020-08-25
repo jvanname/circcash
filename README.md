@@ -3,7 +3,9 @@ Circcash integration/staging tree
 
 
 Copyright (c) 2009-2014 Bitcoin Developers
+
 Copyright (c) 2011-2014 Circcash Developers
+
 Copyright (c) 2020 Joseph Van Name Ph.D.
 
 What is Circcash?
@@ -17,11 +19,12 @@ Circcash is a fork of Bitcoin using Hashspin as a proof-of-work algorithm. Hashs
  - Mining reward remains constant
  - 2016 blocks to retarget difficulty
  - 12.5% of newly mined coins will be sent to a development fund. The development fund will be cut off after the following two conditions are BOTH met:
- - Forked from Litecoin v0.8.7.5
 
  1. The cryptocurrency has been out for four years, and
  
  2. The total number of 'hashes' computed for mining exceeds a threshold.
+
+ - Forked from Litecoin v0.8.7.5
 
 The Circcash development team may cut off the 12.5% funding early.
 
