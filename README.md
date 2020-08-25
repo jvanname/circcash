@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Circcash integration/staging tree
 ================================
 
@@ -78,6 +77,3 @@ Unit tests for the GUI code are in `src/qt/test/`. To compile and run them:
     make -f Makefile.test
     ./circcash-qt_test
 
-=======
-# circcash
->>>>>>> cb68de50883070a120652e0d90f9b365de54f7f1
