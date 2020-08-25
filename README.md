@@ -2,25 +2,31 @@
 Circcash integration/staging tree
 ================================
 
-http://www.circcash.org
 
 Copyright (c) 2009-2014 Bitcoin Developers
 Copyright (c) 2011-2014 Circcash Developers
+Copyright (c) 2020 Joseph Van Name Ph.D.
 
 What is Circcash?
 ----------------
 
-Circcash is a lite version of Bitcoin using scrypt as a proof-of-work algorithm.
- - 2.5 minute block targets
- - subsidy halves in 840k blocks (~4 years)
- - ~84 million total coins
-
-The rest is the same as Bitcoin.
- - 50 coins per block
+Circcash is a fork of Bitcoin using Hashspin as a proof-of-work algorithm. Hashspin is designed to acceleratee the development of reversible computing hardware. Hashspin is the only cryptocurrency mining algorithm that is designed to solve an extremely important scientific problem.
+ - 2.0 minute block targets
+ - 10 CIRCs per block
+ - No subsidy halving
+ - Supply increases linearly (to better advance science)
+ - Mining reward remains constant
  - 2016 blocks to retarget difficulty
+ - 12.5% of newly mined coins will be sent to a development fund. The development fund will be cut off after the following two conditions are BOTH met:
+ - Forked from Litecoin v0.8.7.5
 
-For more information, as well as an immediately useable, binary version of
-the Circcash client sofware, see http://www.circcash.org.
+ 1. The cryptocurrency has been out for four years, and
+ 
+ 2. The total number of 'hashes' computed for mining exceeds a threshold.
+
+The Circcash development team may cut off the 12.5% funding early.
+
+The rest is the same as Bitcoin/Litecoin.
 
 License
 -------
