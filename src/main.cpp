@@ -4518,16 +4518,10 @@ txNew.vout[1].scriptPubKey=developerCScript;
         nLastBlockSize = nBlockSize;
         printf("CreateNewBlock(): total size %"PRI64u"\n", nBlockSize);
 
-//        pblock->vtx[0].vout[0].nValue = 0.82*GetBlockValue(pindexPrev->nHeight+1, nFees);
-//        pblock->vtx[0].vout[1].nValue =GetBlockValue(pindexPrev->nHeight+1, nFees)-0.82*GetBlockValue(pindexPrev->nHeight+1, nFees);
 
-        pblock->vtx[0].vout[0].nValue = 0.8*GetBlockValue(pindexPrev->nHeight+1, nFees);
-        pblock->vtx[0].vout[1].nValue =GetBlockValue(pindexPrev->nHeight+1, nFees)-0.8*GetBlockValue(pindexPrev->nHeight+1, nFees);
+        pblock->vtx[0].vout[0].nValue = 0.87*GetBlockValue(pindexPrev->nHeight+1, nFees);
+        pblock->vtx[0].vout[1].nValue =GetBlockValue(pindexPrev->nHeight+1, nFees)-0.87*GetBlockValue(pindexPrev->nHeight+1, nFees);
 
-
-
-//        pblock->vtx[0].vout[0].nValue = 0.0*GetBlockValue(pindexPrev->nHeight+1, nFees);
-//        pblock->vtx[0].vout[1].nValue =GetBlockValue(pindexPrev->nHeight+1, nFees)-0.0*GetBlockValue(pindexPrev->nHeight+1, nFees);
 	pblocktemplate->vTxFees[0] = -nFees;
 
         // Fill in header
