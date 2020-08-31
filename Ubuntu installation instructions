@@ -30,7 +30,7 @@ sudo apt-get install openssl1.0
  
 sudo apt-get install libssl1.0-dev
 
-git clone -b 0.8 https://github.com/jvanname/circcash.git
+git clone https://github.com/jvanname/circcash.git
 
 // Navigate to the Circcash folder and type the following into the terminal to compile your Circcash wallet.
 
