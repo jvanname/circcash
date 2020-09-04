@@ -36,6 +36,16 @@ License
 Circcash is released under the terms of the MIT license. See `COPYING` for more
 information or see http://opensource.org/licenses/MIT.
 
+
+Installation
+-------
+
+Go to this link for instructions for installing Circcash on Ubuntu.
+
+https://github.com/jvanname/circcash/blob/master/Ubuntu%20installation%20instructions
+
+
+
 Development process
 -------------------
 
