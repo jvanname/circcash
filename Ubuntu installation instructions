@@ -1,4 +1,4 @@
-// Install Ubuntu 18.04.5 LTS (Bionic Beaver)
+// Install Ubuntu 18.04.5 LTS (Bionic Beaver). The version is important. These installation instructions won't work with the wrong version of Ubuntu.
 
 // Using the Ubuntu terminal, copy and paste the following to install the required dependencies and to clone the Circcash repository.
 
