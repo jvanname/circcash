@@ -11,7 +11,7 @@ Copyright (c) 2020 Joseph Van Name Ph.D.
 What is Circcash?
 ----------------
 
-Circcash is a fork of Bitcoin using Hashspin as a proof-of-work algorithm. Hashspin is designed to acceleratee the development of reversible computing hardware. Hashspin is the only cryptocurrency mining algorithm that is designed to solve an extremely important scientific problem.
+Circcash is a fork of Bitcoin using Hashspin as a proof-of-work algorithm. Hashspin is designed to accelerate the development of reversible computing hardware. Hashspin is the only cryptocurrency mining algorithm that is designed to solve an extremely important scientific problem.
  - 2.0 minute block targets
  - 10 CIRCs per block
  - No subsidy halving
