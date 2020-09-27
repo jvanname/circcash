@@ -4,7 +4,7 @@ Circcash integration/staging tree
 
 Copyright (c) 2009-2014 Bitcoin Developers
 
-Copyright (c) 2011-2014 Circcash Developers
+Copyright (c) 2011-2014 Litecoin Developers
 
 Copyright (c) 2020 Joseph Van Name Ph.D.
 
