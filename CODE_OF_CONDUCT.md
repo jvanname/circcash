@@ -7,7 +7,7 @@ contributors and maintainers pledge to making participation in our project and
 our community a harassment-free experience for everyone, regardless of age, disability,
 ethnicity, sex characteristics, gender identity and expression,
 level of experience, education, socio-economic status, irrelevant arrests or convictions, nationality, personal
-appearance, marital status, race, religion, or sexual identity and orientation.
+appearance, marital or relationship status, race, religion, or sexual identity and orientation.
 
 ## Our Standards
 
