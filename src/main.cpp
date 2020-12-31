@@ -4518,10 +4518,16 @@ txNew.vout[1].scriptPubKey=developerCScript;
         nLastBlockSize = nBlockSize;
         printf("CreateNewBlock(): total size %"PRI64u"\n", nBlockSize);
 
+//        pblock->vtx[0].vout[0].nValue = 0.82*GetBlockValue(pindexPrev->nHeight+1, nFees);
+//        pblock->vtx[0].vout[1].nValue =GetBlockValue(pindexPrev->nHeight+1, nFees)-0.82*GetBlockValue(pindexPrev->nHeight+1, nFees);
 
         pblock->vtx[0].vout[0].nValue = 0.87*GetBlockValue(pindexPrev->nHeight+1, nFees);
         pblock->vtx[0].vout[1].nValue =GetBlockValue(pindexPrev->nHeight+1, nFees)-0.87*GetBlockValue(pindexPrev->nHeight+1, nFees);
 
+
+
+//        pblock->vtx[0].vout[0].nValue = 0.0*GetBlockValue(pindexPrev->nHeight+1, nFees);
+//        pblock->vtx[0].vout[1].nValue =GetBlockValue(pindexPrev->nHeight+1, nFees)-0.0*GetBlockValue(pindexPrev->nHeight+1, nFees);
 	pblocktemplate->vTxFees[0] = -nFees;
 
         // Fill in header
@@ -4708,15 +4714,100 @@ void static CirccashMiner(CWallet *pwallet)
         {
             unsigned int nHashesDone = 0;
 
+unsigned char innerhash[40];
+SHA256_CTX sha256;
+SHA256_Init(&sha256);
+SHA256_Update(&sha256,BEGIN(pblock->nVersion),76);
+SHA256_Final(innerhash,&sha256);
 
             uint256 thash;
             loop
+
+/*
 
             {
 
 
 
-hashspinfinal(BEGIN(pblock->nVersion),pblock->nNonce,BEGIN(thash));
+uint32_t y=(pblock->nNonce);
+uint32_t cc=hashspincc(y);
+uint32_t dd=hashspindd(y);
+uint32_t newcc=cc;
+uint32_t newdd=dd;
+
+revcyclelfsr(innerhash,cc,dd);
+
+unsigned char nexthash[32];
+
+if (testequality(cc,newcc,dd,newdd)){
+uint32_t x=hashspinrecombine(cc,dd);
+
+innerhash[32]=255&x;
+innerhash[33]=255&(x>>8);
+innerhash[34]=255&(x>>16);
+innerhash[35]=255&(x>>24);
+innerhash[36]=255&y;
+innerhash[37]=255&(y>>8);
+innerhash[38]=255&(y>>16);
+innerhash[39]=255&(y>>24);
+
+SHA256_Init(&sha256);
+SHA256_Update(&sha256,innerhash,40);
+SHA256_Final(nexthash,&sha256);
+memcpy(BEGIN(thash),&nexthash,32);
+
+                if (thash <= hashTarget)
+                {
+                    // Found a solution
+       		    (pblock->nNonce)=x;
+                    SetThreadPriority(THREAD_PRIORITY_NORMAL);
+                    CheckWork(pblock, *pwallet, reservekey);
+                    SetThreadPriority(THREAD_PRIORITY_LOWEST);
+                    break;
+                }
+
+}
+
+
+
+                pblock->nNonce += 1;
+                nHashesDone += 1;
+                if ((pblock->nNonce & 0xFF) == 0)
+                    break;
+            }
+
+
+*/
+
+////////////////////////////
+            {
+uint32_t x=(pblock->nNonce);
+uint32_t cc=hashspincc(x);
+uint32_t dd=hashspindd(x);
+uint32_t newcc=cc;
+uint32_t newdd=dd;
+
+fastcyclelfsr(innerhash,newcc,newdd);
+
+unsigned char nexthash[32];
+
+if (testequality(cc,newcc,dd,newdd)){
+uint32_t y=hashspinrecombine(newcc,newdd);
+
+innerhash[32]=255&x;
+innerhash[33]=255&(x>>8);
+innerhash[34]=255&(x>>16);
+innerhash[35]=255&(x>>24);
+innerhash[36]=255&y;
+innerhash[37]=255&(y>>8);
+innerhash[38]=255&(y>>16);
+innerhash[39]=255&(y>>24);
+
+
+SHA256_Init(&sha256);
+SHA256_Update(&sha256,innerhash,40);
+SHA256_Final(nexthash,&sha256);
+memcpy(BEGIN(thash),&nexthash,32);
 
                 if (thash <= hashTarget)
                 {
@@ -4727,6 +4818,7 @@ hashspinfinal(BEGIN(pblock->nVersion),pblock->nNonce,BEGIN(thash));
                     break;
                 }
 
+}
 
 
 
@@ -4735,6 +4827,8 @@ hashspinfinal(BEGIN(pblock->nVersion),pblock->nNonce,BEGIN(thash));
                 if ((pblock->nNonce & 0xFF) == 0)
                     break;
             }
+
+////////////////
 
             // Meter hashes/sec
             static int64 nHashCounter;
