@@ -1,7 +1,7 @@
 /*
  * Copyright 2009 Colin Percival, 2011 ArtForz, 2012-2013 pooler
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -334,6 +334,59 @@ void scrypt_1024_1_1_256(const char *input, char *output)
 }
 
 
+void fastcyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd){
+uint32_t ccc;
+uint32_t ddd;
+uint32_t i;
+uint32_t j;
+uint32_t point;
+uint32_t lar;
+
+
+
+for (i=0; i <32; i++) {
+point=hash[i];
+for (j=0; j <4;j++) {
+
+lar=point&3;
+if (lar>1){lar^=18;}
+
+cc=((cc<<8)|(cc>>7))&32767;
+dd=((dd<<8)|(dd>>9))&131071;
+ccc=cc<<24;
+ddd=dd<<24;
+cc^=(ccc>>23)^((ccc>>21)&(ddd>>21));
+dd^=(ddd>>21)^(ccc>>23);
+cc^=lar<<2;
+point=(point>>2);
+}
+}
+
+}
+
+void cyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd){
+uint32_t i;
+uint32_t j;
+uint32_t k;
+
+for (i=0;i<32;i++){
+for (j=0;j<8;j++){
+for (k=0; k < 4; k++) {
+cc=((cc<<1)|(cc>>14))&32767;
+dd=((dd<<1)|(dd>>16))&131071;
+if ((cc&1)==1){cc^=2; dd^=2;
+}
+if ((dd&1)==1){
+dd^=8;
+}
+if (((cc&1)==1)&&((dd&1)==1)){
+cc^=8;
+}
+}
+cc^=((hash[i]>>(j+1-2*(j%2)))&1)<<2;
+}
+}
+}
 
 void bcyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd){
 bool cclist[15];
@@ -347,18 +400,16 @@ bool temp;
 bool expandhash[256];
 
 for (i=0;i<32;i++){
-for (j=0;j<4;j++){
-for (k=0;k<2;k++){
-expandhash[8*i+2*j+k]=(hash[i]>>(2*j+1-k))%2;
-}
+for (j=0;j<8;j++){
+expandhash[8*i+j]=(hash[i]>>j)%2;
 }
 }
 
 for (i=0;i<15;i++){
-cclist[i]=(cc&(1<<i))>>i;
+cclist[i]=(cc&&(1<<i))>>i;
 }
 for (i=0;i<17;i++){
-ddlist[i]=(dd&(1<<i))>>i;
+ddlist[i]=(dd&&(1<<i))>>i;
 }
 
 for (i=0;i<256;i++){
@@ -409,6 +460,412 @@ return cc+(dd<<15);
 }
 
 
+void bitrotate_forward(uint32_t &x, uint32_t &len) {
+    uint32_t y = x;
+    y += x;
+    x -= y / 2;
+    if (y >= uint32_t(pow(2, len))) {
+        y -= uint32_t(pow(2, len)) - 1;
+        assert(y % 2 > 0);
+    }
+    x ^= y;
+    y ^= x;
+    x ^= y;
+    assert(y == 0);
+}
+
+void bitrotate_reverse(uint32_t &x, uint32_t &len) {
+    uint32_t y = 0;
+    x ^= y;
+    y ^= x;
+    x ^= y;
+    if (y % 2 > 0) {
+        y += uint32_t(pow(2, len)) - 1;
+        assert(y >= uint32_t(pow(2, len)));
+    }
+    x += y / 2;
+    y -= x;
+    assert(y == x);
+}
+
+//I still need to test these functions further.
+
+void hashspinlfsr_forward(uint32_t &cc, uint32_t &dd,unsigned char input[32]) {
+    uint32_t i = 0;
+    uint32_t j = 0;
+    uint32_t jj = 0;
+    uint32_t k = 0;
+    uint32_t pp = 15;
+    uint32_t qq = 17;
+    assert(i == 0);
+    while (!(i == 32)) {
+        assert(j == 0);
+        while (!(j == 4)) {
+            assert(jj == 0);
+            while (!(jj == 2)) {
+                assert(k == 0);
+                while (!(k == 4)) {
+                    bitrotate_forward(cc, pp);
+                    bitrotate_forward(dd, qq);
+                    if ((cc & 1) != 0) {
+                        cc ^= 2;
+                        dd ^= 2;
+                        assert((cc & 1) != 0);
+                    }
+                    if ((dd & 1) != 0) {
+                        dd ^= 8;
+                        assert((dd & 1) != 0);
+                    }
+                    if ((cc & 1) != 0 && (dd & 1) != 0) {
+                        cc ^= 8;
+                        assert((cc & 1) != 0 && (dd & 1) != 0);
+                    }
+                    k += 1;
+                    assert(!(k == 0));
+                }
+                k ^= 4;
+                if ((input[i] & uint32_t(pow(2, 2 * j + 1 - jj))) != 0) {
+                    cc ^= 4;
+                    assert((input[i] & uint32_t(pow(2, 2 * j + 1 - jj))) != 0);
+                }
+                jj += 1;
+                assert(!(jj == 0));
+            }
+            jj ^= 2;
+            j += 1;
+            assert(!(j == 0));
+        }
+        j ^= 4;
+        i += 1;
+        assert(!(i == 0));
+    }
+    assert(qq == 17);
+    assert(pp == 15);
+    assert(k == 0);
+    assert(jj == 0);
+    assert(j == 0);
+    assert(i == 32);
+}
+
+void hashspinlfsr_reverse(uint32_t &cc, uint32_t &dd, unsigned char input[32]) {
+    uint32_t i = 32;
+    uint32_t j = 0;
+    uint32_t jj = 0;
+    uint32_t k = 0;
+    uint32_t pp = 15;
+    uint32_t qq = 17;
+    assert(i == 32);
+    while (!(i == 0)) {
+        i -= 1;
+        j ^= 4;
+        assert(j == 4);
+        while (!(j == 0)) {
+            j -= 1;
+            jj ^= 2;
+            assert(jj == 2);
+            while (!(jj == 0)) {
+                jj -= 1;
+                if ((input[i] & uint32_t(pow(2, 2 * j + 1 - jj))) != 0) {
+                    cc ^= 4;
+                    assert((input[i] & uint32_t(pow(2, 2 * j + 1 - jj))) != 0);
+                }
+                k ^= 4;
+                assert(k == 4);
+                while (!(k == 0)) {
+                    k -= 1;
+                    if ((cc & 1) != 0 && (dd & 1) != 0) {
+                        cc ^= 8;
+                        assert((cc & 1) != 0 && (dd & 1) != 0);
+                    }
+                    if ((dd & 1) != 0) {
+                        dd ^= 8;
+                        assert((dd & 1) != 0);
+                    }
+                    if ((cc & 1) != 0) {
+                        dd ^= 2;
+                        cc ^= 2;
+                        assert((cc & 1) != 0);
+                    }
+                    bitrotate_reverse(dd, qq);
+                    bitrotate_reverse(cc, pp);
+                    assert(!(k == 4));
+                }
+                assert(!(jj == 2));
+            }
+            assert(!(j == 4));
+        }
+        assert(!(i == 32));
+    }
+    assert(qq == 17);
+    assert(pp == 15);
+    assert(k == 0);
+    assert(jj == 0);
+    assert(j == 0);
+    assert(i == 0);
+}
+
+void roundmap_forward(int *x, int *y) {
+    int i = 14;
+    int j = 16;
+    assert(i == 14);
+    while (!(i == 0)) {
+        i -= 1;
+        x[i] ^= x[(i + 1) % 15];
+        x[(i + 1) % 15] ^= x[i];
+        x[i] ^= x[(i + 1) % 15];
+        assert(!(i == 14));
+    }
+    assert(j == 16);
+    while (!(j == 0)) {
+        j -= 1;
+        y[j] ^= y[(j + 1) % 17];
+        y[(j + 1) % 17] ^= y[j];
+        y[j] ^= y[(j + 1) % 17];
+        assert(!(j == 16));
+    }
+    x[1] ^= x[0];
+    x[3] ^= x[0] & y[0];
+    y[3] ^= y[0];
+    y[1] ^= x[0];
+    assert(j == 0);
+    assert(i == 0);
+}
+void roundmap_reverse(int *x, int *y) {
+    int i = 0;
+    int j = 0;
+    y[1] ^= x[0];
+    y[3] ^= y[0];
+    x[3] ^= x[0] & y[0];
+    x[1] ^= x[0];
+    assert(j == 0);
+    while (!(j == 16)) {
+        y[j] ^= y[(j + 1) % 17];
+        y[(j + 1) % 17] ^= y[j];
+        y[j] ^= y[(j + 1) % 17];
+        j += 1;
+        assert(!(j == 0));
+    }
+    assert(i == 0);
+    while (!(i == 14)) {
+        x[i] ^= x[(i + 1) % 15];
+        x[(i + 1) % 15] ^= x[i];
+        x[i] ^= x[(i + 1) % 15];
+        i += 1;
+        assert(!(i == 0));
+    }
+    assert(j == 16);
+    assert(i == 14);
+}
+
+void basefunction_forward(int *hash, int *x, int *y) {
+    int i = 0;
+    int j = 0;
+    assert(i == 0);
+    while (!(i == 256)) {
+        assert(j == 0);
+        while (!(j == 4)) {
+            j += 1;
+            roundmap_forward(x, y);
+            assert(!(j == 0));
+        }
+        j -= 4;
+        x[2] ^= hash[i + 1 - 2 * i % 2];
+        i += 1;
+        assert(!(i == 0));
+    }
+    assert(j == 0);
+    assert(i == 256);
+}
+void basefunction_reverse(int *hash, int *x, int *y) {
+    int i = 256;
+    int j = 0;
+    assert(i == 256);
+    while (!(i == 0)) {
+        i -= 1;
+        x[2] ^= hash[i + 1 - 2 * i % 2];
+        j += 4;
+        assert(j == 4);
+        while (!(j == 0)) {
+            roundmap_reverse(x, y);
+            j -= 1;
+            assert(!(j == 4));
+        }
+        assert(!(i == 256));
+    }
+    assert(j == 0);
+    assert(i == 0);
+}
+
+void readoff_forward(int *x, int *y, int *w) {
+    int i = 0;
+    assert(i == 0);
+    while (!(i == 8)) {
+        w[i] ^= x[i + 7];
+        i += 1;
+        assert(!(i == 0));
+    }
+    i -= 8;
+    assert(i == 0);
+    while (!(i == 8)) {
+        w[i + 8] ^= y[i + 9];
+        i += 1;
+        assert(!(i == 0));
+    }
+    assert(i == 8);
+}
+void readoff_reverse(int *x, int *y, int *w) {
+    int i = 8;
+    assert(i == 8);
+    while (!(i == 0)) {
+        i -= 1;
+        w[i + 8] ^= y[i + 9];
+        assert(!(i == 8));
+    }
+    i += 8;
+    assert(i == 8);
+    while (!(i == 0)) {
+        i -= 1;
+        w[i] ^= x[i + 7];
+        assert(!(i == 8));
+    }
+    assert(i == 0);
+}
+
+void spreadfifteen_forward(int &x, int *y) {
+    int s = 15;
+    int i = 0;
+    assert(i == 0);
+    while (!(i == s)) {
+        if ((x & int(pow(2, i))) != 0) {
+            y[i] ^= 1;
+            x ^= int(pow(2, i));
+            assert(y[i] != 0);
+        }
+        i += 1;
+        assert(!(i == 0));
+    }
+    assert(i == s);
+    assert(s == 15);
+}
+void spreadfifteen_reverse(int &x, int *y) {
+    int s = 15;
+    int i = s;
+    assert(i == s);
+    while (!(i == 0)) {
+        i -= 1;
+        if (y[i] != 0) {
+            x ^= int(pow(2, i));
+            y[i] ^= 1;
+            assert((x & int(pow(2, i))) != 0);
+        }
+        assert(!(i == s));
+    }
+    assert(i == 0);
+    assert(s == 15);
+}
+
+void spreadseventeen_forward(int &x, int *y) {
+    int s = 17;
+    int i = 0;
+    assert(i == 0);
+    while (!(i == s)) {
+        if ((x & int(pow(2, i))) != 0) {
+            y[i] ^= 1;
+            x ^= int(pow(2, i));
+            assert(y[i] != 0);
+        }
+        i += 1;
+        assert(!(i == 0));
+    }
+    assert(i == s);
+    assert(s == 17);
+}
+void spreadseventeen_reverse(int &x, int *y) {
+    int s = 17;
+    int i = s;
+    assert(i == s);
+    while (!(i == 0)) {
+        i -= 1;
+        if (y[i] != 0) {
+            x ^= int(pow(2, i));
+            y[i] ^= 1;
+            assert((x & int(pow(2, i))) != 0);
+        }
+        assert(!(i == s));
+    }
+    assert(i == 0);
+    assert(s == 17);
+}
+
+void hashspread_forward(int *hashbytes, int *hashbits) {
+    int i = 0;
+    int j = 0;
+    assert(i == 0);
+    while (!(i == 32)) {
+        assert(j == 0);
+        while (!(j == 8)) {
+            if ((hashbytes[i] & int(pow(2, j))) != 0) {
+                hashbytes[i] ^= int(pow(2, j));
+                hashbits[8 * i + j] ^= 1;
+                assert(hashbits[8 * i + j] != 0);
+            }
+            j += 1;
+            assert(!(j == 0));
+        }
+        j -= 8;
+        i += 1;
+        assert(!(i == 0));
+    }
+    assert(j == 0);
+    assert(i == 32);
+}
+void hashspread_reverse(int *hashbytes, int *hashbits) {
+    int i = 32;
+    int j = 0;
+    assert(i == 32);
+    while (!(i == 0)) {
+        i -= 1;
+        j += 8;
+        assert(j == 8);
+        while (!(j == 0)) {
+            j -= 1;
+            if (hashbits[8 * i + j] != 0) {
+                hashbits[8 * i + j] ^= 1;
+                hashbytes[i] ^= int(pow(2, j));
+                assert((hashbytes[i] & int(pow(2, j))) != 0);
+            }
+            assert(!(j == 8));
+        }
+        assert(!(i == 32));
+    }
+    assert(j == 0);
+    assert(i == 0);
+}
+
+void bhashspinlfsr_forward(int &cc, int &dd, int *hash) {
+    int cx[15] = {0};
+    int dx[17] = {0};
+    int hashbits[256] = {0};
+    spreadfifteen_forward(cc, cx);
+    spreadseventeen_forward(dd, dx);
+    hashspread_forward(hash, hashbits);
+    basefunction_forward(hashbits, cx, dx);
+    hashspread_reverse(hash, hashbits);
+    spreadseventeen_reverse(dd, dx);
+    spreadfifteen_reverse(cc, cx);
+}
+void bhashspinlfsr_reverse(int &cc, int &dd, int *hash) {
+    int cx[15] = {0};
+    int dx[17] = {0};
+    int hashbits[256] = {0};
+    spreadfifteen_forward(cc, cx);
+    spreadseventeen_forward(dd, dx);
+    hashspread_forward(hash, hashbits);
+    basefunction_reverse(hashbits, cx, dx);
+    hashspread_reverse(hash, hashbits);
+    spreadseventeen_reverse(dd, dx);
+    spreadfifteen_reverse(cc, cx);
+}
 
 void hashspinfinal(const char *input,uint32_t x, char *output){
 
@@ -425,7 +882,7 @@ uint32_t dd=hashspindd(x);
 uint32_t newcc=cc;
 uint32_t newdd=dd;
 
-bcyclelfsr(hash,newcc,newdd);
+fastcyclelfsr(hash,newcc,newdd);
 
 uint32_t y=hashspinrecombine(newcc,newdd);
 
@@ -456,5 +913,33 @@ memcpy(output,&nexthash,32);
 
 }
 
+
+void revcyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd){
+int i;
+int j;
+int k;
+
+for (i=31;i>=0;i--){
+for (j=7;j>=0;j--){
+cc^=((hash[i]>>(j+1-2*(j%2)))&1)<<2;
+for (k=3;k>=0;k--){
+
+
+if ((cc&1)==1){cc^=2; dd^=2;
+}
+if ((dd&1)==1){
+dd^=8;
+}
+if (((cc&1)==1)&&((dd&1)==1)){
+cc^=8;
+}
+cc=((cc<<14)|(cc>>1))&32767;
+dd=((dd<<16)|(dd>>1))&131071;
+
+}
+}
+}
+
+}
 
 
