@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+
 static const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
 
 void scrypt_1024_1_1_256(const char *input, char *output);
@@ -44,7 +45,9 @@ static inline void le32enc(void *pp, uint32_t x)
 }
 #endif
 
-void bcyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd);
+void fastcyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd);
+
+void cyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd);
 
 bool testequality(uint32_t cc,uint32_t oldcc,uint32_t dd,uint32_t olddd);
 uint32_t hashspincc(uint32_t x);
@@ -55,6 +58,35 @@ uint32_t hashspinrecombine(uint32_t cc,uint32_t dd);
 
 void hashspinfinal(const char *input,uint32_t x, char *output);
 
+void bitrotate_forward(uint32_t &x, uint32_t &len);
+void bitrotate_reverse(uint32_t &x, uint32_t &len);
+
+void hashspinlfsr_forward(uint32_t &cc, uint32_t &dd,unsigned char input[32]);
+void hashspinlfsr_reverse(uint32_t &cc, uint32_t &dd,unsigned char input[32]);
+
+void roundmap_forward(int *x, int *y);
+void roundmap_reverse(int *x, int *y);
+
+void basefunction_forward(int *hash, int *x, int *y);
+void basefunction_reverse(int *hash, int *x, int *y);
+
+void readoff_forward(int *x, int *y, int *w);
+void readoff_reverse(int *x, int *y, int *w);
+
+void spreadfifteen_forward(int &x, int *y);
+void spreadfifteen_reverse(int &x, int *y);
+
+void spreadseventeen_forward(int &x, int *y);
+void spreadseventeen_reverse(int &x, int *y);
+
+void hashspread_forward(int *hashbytes, int *hashbits);
+void hashspread_reverse(int *hashbytes, int *hashbits);
+
+void bhashspinlfsr_forward(int &cc, int &dd, int *hash);
+void bhashspinlfsr_reverse(int &cc, int &dd, int *hash);
+
+
+void revcyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd);
 
 
 
