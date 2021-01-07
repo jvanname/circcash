@@ -243,7 +243,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR CIRCCASHS&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR CIRCS&lt;/b&gt;!</source>
         <translation>Advertència: Si encripteu el vostre moneder i perdeu la constrasenya, &lt;b&gt;PERDREU TOTS ELS VOSTRES CIRCCASHS&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -270,7 +270,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-56"/>
-        <source>Circcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your circcashs from being stolen by malware infecting your computer.</source>
+        <source>Circcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your CIRCs from being stolen by malware infecting your computer.</source>
         <translation>Circcash es tancarà ara per acabar el procés d&apos;encriptació. Recorda que encriptar el teu moneder no protegeix completament els teus circcashs de ser robades per programari maliciós instal·lat al teu ordinador.</translation>
     </message>
     <message>
