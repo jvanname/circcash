@@ -138,7 +138,7 @@ Produktet indeholder software som er udviklet af OpenSSL Project til brug i Open
     <message>
         <location line="+1"/>
         <source>Send &amp;Coins</source>
-        <translation>Send circcashs</translation>
+        <translation>Send CIRCs</translation>
     </message>
     <message>
         <location line="+260"/>
