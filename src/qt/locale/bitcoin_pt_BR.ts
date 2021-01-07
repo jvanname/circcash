@@ -248,7 +248,7 @@ Este produto inclui software desenvolvido pelo Projeto OpenSSL para uso no OpenS
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR CIRCCASHS&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR CIRCS&lt;/b&gt;!</source>
         <translation>Aviso: Se você criptografar sua carteira e perder sua senha, você vai &lt;b&gt;perder todos os seus CIRCCASHS!&lt;/b&gt;</translation>
     </message>
     <message>
@@ -275,7 +275,7 @@ Este produto inclui software desenvolvido pelo Projeto OpenSSL para uso no OpenS
     </message>
     <message>
         <location line="-56"/>
-        <source>Circcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your circcashs from being stolen by malware infecting your computer.</source>
+        <source>Circcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your CIRCs from being stolen by malware infecting your computer.</source>
         <translation>O Circcash irá fechar agora para finalizar o processo de encriptação. Lembre-se de que encriptar sua carteira não protege totalmente suas circcashs de serem roubadas por malwares que tenham infectado o seu computador.</translation>
     </message>
     <message>
