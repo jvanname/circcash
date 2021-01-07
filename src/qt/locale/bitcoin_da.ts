@@ -2137,7 +2137,7 @@ Adresse: %4
     <message>
         <location filename="../walletmodel.cpp" line="+193"/>
         <source>Send Coins</source>
-        <translation>Send circcashs</translation>
+        <translation>Send CIRCs</translation>
     </message>
 </context>
 <context>
