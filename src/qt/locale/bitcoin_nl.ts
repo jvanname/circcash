@@ -248,7 +248,7 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR CIRCCASHS&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR CIRCS&lt;/b&gt;!</source>
         <translation>Waarschuwing: Als u uw portemonnee versleutelt en uw wachtwoord vergeet, zult u &lt;b&gt;AL UW CIRCCASHS VERLIEZEN&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -275,7 +275,7 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
     </message>
     <message>
         <location line="-56"/>
-        <source>Circcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your circcashs from being stolen by malware infecting your computer.</source>
+        <source>Circcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your CIRCs from being stolen by malware infecting your computer.</source>
         <translation>Circcash zal nu afsluiten om het versleutelingsproces te voltooien. Onthoud dat het versleutelen van uw portemonnee u niet volledig kan beschermen: Malware kan uw computer infecteren en uw circcashs stelen.</translation>
     </message>
     <message>
