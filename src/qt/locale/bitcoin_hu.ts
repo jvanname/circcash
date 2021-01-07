@@ -247,7 +247,7 @@ Ez a termék az OpenSSL Project által lett kifejlesztve az OpenSSL Toolkit (htt
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR CIRCCASHS&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR CIRCS&lt;/b&gt;!</source>
         <translation>Figyelem: Ha kódolod a tárcát, és elveszíted a jelszavad, akkor &lt;b&gt;AZ ÖSSZES CIRCCASHODAT IS EL FOGOD VESZÍTENI!&lt;/b&gt;</translation>
     </message>
     <message>
@@ -274,7 +274,7 @@ Ez a termék az OpenSSL Project által lett kifejlesztve az OpenSSL Toolkit (htt
     </message>
     <message>
         <location line="-56"/>
-        <source>Circcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your circcashs from being stolen by malware infecting your computer.</source>
+        <source>Circcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your CIRCs from being stolen by malware infecting your computer.</source>
         <translation>Circcash will close now to finish the encryption process. Ne feledd, hogy a tárca titkosítása sem nyújt teljes védelmet az adathalász programok fertőzésével szemben.</translation>
     </message>
     <message>
