@@ -1290,7 +1290,7 @@ Adresse: %4
         <location line="+5"/>
         <location line="+5"/>
         <source>Send Coins</source>
-        <translation>Send circcashs</translation>
+        <translation>Send CIRCs</translation>
     </message>
     <message>
         <location line="+50"/>
