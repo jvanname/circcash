@@ -338,7 +338,6 @@ void fastcyclelfsr(unsigned char hash[32],uint32_t &cc,uint32_t &dd){
 uint32_t ccc;
 uint32_t ddd;
 uint32_t i;
-uint32_t j;
 uint32_t point;
 uint32_t lar;
 
@@ -913,7 +912,7 @@ uint32_t dd=hashspindd(x);
 uint32_t newcc=cc;
 uint32_t newdd=dd;
 
-fastcyclelfsr(hash,newcc,newdd);
+cyclelfsr(hash,newcc,newdd);
 
 uint32_t y=hashspinrecombine(newcc,newdd);
 
