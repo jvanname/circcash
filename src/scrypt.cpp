@@ -346,11 +346,9 @@ uint32_t lar;
 
 for (i=0; i <32; i++) {
 point=hash[i];
-for (j=0; j <4;j++) {
 
 lar=point&3;
 if (lar>1){lar^=18;}
-
 cc=((cc<<8)|(cc>>7))&32767;
 dd=((dd<<8)|(dd>>9))&131071;
 ccc=cc<<24;
@@ -359,7 +357,40 @@ cc^=(ccc>>23)^((ccc>>21)&(ddd>>21));
 dd^=(ddd>>21)^(ccc>>23);
 cc^=lar<<2;
 point=(point>>2);
-}
+
+lar=point&3;
+if (lar>1){lar^=18;}
+cc=((cc<<8)|(cc>>7))&32767;
+dd=((dd<<8)|(dd>>9))&131071;
+ccc=cc<<24;
+ddd=dd<<24;
+cc^=(ccc>>23)^((ccc>>21)&(ddd>>21));
+dd^=(ddd>>21)^(ccc>>23);
+cc^=lar<<2;
+point=(point>>2);
+
+lar=point&3;
+if (lar>1){lar^=18;}
+cc=((cc<<8)|(cc>>7))&32767;
+dd=((dd<<8)|(dd>>9))&131071;
+ccc=cc<<24;
+ddd=dd<<24;
+cc^=(ccc>>23)^((ccc>>21)&(ddd>>21));
+dd^=(ddd>>21)^(ccc>>23);
+cc^=lar<<2;
+point=(point>>2);
+
+lar=point&3;
+if (lar>1){lar^=18;}
+cc=((cc<<8)|(cc>>7))&32767;
+dd=((dd<<8)|(dd>>9))&131071;
+ccc=cc<<24;
+ddd=dd<<24;
+cc^=(ccc>>23)^((ccc>>21)&(ddd>>21));
+dd^=(ddd>>21)^(ccc>>23);
+cc^=lar<<2;
+point=(point>>2);
+
 }
 
 }
