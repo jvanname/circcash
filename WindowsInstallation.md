@@ -16,3 +16,5 @@ Update 11/23/2020: At least one entity who has claimed to have created a Circcas
 actual identity of anyone creating a Windows Circcash wallet and please make sure that the wallet is OPEN SOURCE.
 
 Update 1/4/2021: The Windows Circcash wallet will now be made available for the time being in order to help determine why anti-virus programs label this software as malware.
+
+Edited: The Windows Circcash wallet can be found at circcash-0.8.7.5-win32-setup.exe.
