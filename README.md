@@ -30,6 +30,8 @@ The Circcash development team may cut off the 12.5% funding early.
 
 The rest is the same as Bitcoin/Litecoin.
 
+See this link for the whitepaper: https://github.com/jvanname/Zammazazzer/blob/master/CirclefishICO.pdf
+
 License
 -------
 
