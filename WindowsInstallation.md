@@ -1,1 +1,1 @@
-The Windows Circcash wallet is the file circcash-0.8.7.5-win32-setup.exe.
+The Windows Circcash wallet is the file circcash-0.8.7.5-win32-setup.exe. If you have any problems with any anti-virus program labelling Circcash as a virus, then please contact me at circcash9192020@protonmail.com or the anti-virus company in order to improve the accuracy of anti-virus programs.
