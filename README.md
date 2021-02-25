@@ -32,8 +32,6 @@ The rest is the same as Bitcoin/Litecoin.
 
 See this link for the whitepaper: https://github.com/jvanname/Zammazazzer/blob/master/CirclefishICO.pdf
 
-Click here to download the Windows executable for Circcash: https://github.com/jvanname/circcash/blob/master/circcash-0.8.7.5-win32-setup.exe
-
 License
 -------
 
@@ -48,7 +46,9 @@ Go to this link for instructions for installing Circcash on Ubuntu.
 
 https://github.com/jvanname/circcash/blob/master/Ubuntu%20installation%20instructions
 
+Click here to download the Windows executable for Circcash.
 
+https://github.com/jvanname/circcash/blob/master/circcash-0.8.7.5-win32-setup.exe
 
 Development process
 -------------------
