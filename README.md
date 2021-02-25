@@ -44,7 +44,7 @@ Installation
 
 Go to this link for instructions for installing Circcash on Ubuntu.
 
-https://github.com/jvanname/circcash/blob/master/Ubuntu%20installation%20instructions
+https://github.com/jvanname/circcash/blob/master/UbuntuInstallationInstructions.md
 
 Click here to download the Windows executable for Circcash.
 
