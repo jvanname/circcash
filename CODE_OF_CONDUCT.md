@@ -28,6 +28,7 @@ Examples of unacceptable behavior by participants include:
 * Public or private harassment
 * Publishing others' private information, such as a physical or electronic
  address, without explicit permission
+* Participating in hateful forums
 * Other conduct which could reasonably be considered inappropriate in a
  professional setting
 
