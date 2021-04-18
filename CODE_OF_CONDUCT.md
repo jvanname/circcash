@@ -28,9 +28,8 @@ Examples of unacceptable behavior by participants include:
 * Public or private harassment
 * Publishing others' private information, such as a physical or electronic
  address, without explicit permission
-* Participating in hateful or offensive forums such as the Circcash (unofficial server) on Discord created on 11/14/2020
-* Other conduct which could reasonably be considered inappropriate in a
- professional setting
+* Participating in hateful or offensive forums such as the unofficial Circcash server on Discord created on 11/14/2020
+* Other conduct which could reasonably be considered inappropriate in a professional setting
 
 ## Our Responsibilities
 
