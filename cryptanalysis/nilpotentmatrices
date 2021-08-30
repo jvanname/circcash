@@ -1,0 +1,31 @@
+# The code is in GAP.
+# Let L be the irreducible representation of the permutation group S_n of degree n-1. The following code finds permutations f_1,...,f_p such that L(f_1)+...+L(f_p) is nilpotent
+# in the extreme case where p is prime, n=p^nn. Such lists are permutations may be useful for analyzing block ciphers where the round keys have small block size (such as 32 bit)
+# and small round key size (such as 1 bit).
+
+onemodulo:=function(x,y) return RemInt(x-1,y)+1; end;
+
+score:=function(array) 
+local a,p,n,list,i,k,newlist,j; 
+p:=Primes[Random([40..168])]; n:=Length(array); list:=[]; 
+for i in [1..n] do list[i]:=Random(GF(p)); od; list[1]:=list[1]-Sum(list); 
+for k in [1..n] do newlist:=[]; 
+for j in [1..n] do newlist[j]:=0; 
+for a in array[j] do 
+newlist[j]:=newlist[j]+list[a]; 
+od; od; 
+list:=newlist; if list=list*0 then return k; fi; 
+od; 
+return 0;
+end;
+
+# We construct a new nilpotent matrix.
+p:=2; nn:=6; n:=p^nn; list:=List([1..n],v->[onemodulo((v-1)*p+1,n)..onemodulo(v*p,n)]);
+ 
+# The following loop constructs new nilpotent matrices from old ones.
+while true do 
+ii:=Random([1..n]); SortBy(list[ii],v->Random([1..n])); newlist:=StructuralCopy(list); a:=Random([1..n]); b:=a; 
+while a=b do a:=Random([1..n]); od; 
+kk:=Random([1..n]); r:=Remove(newlist[a]); s:=Remove(newlist[b]); Add(newlist[a],s); Add(newlist[b],r); ph:=score(newlist); 
+if ph>0 then list:=newlist; Display(ph); fi; 
+od;
