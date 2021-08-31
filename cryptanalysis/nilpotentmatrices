@@ -3,6 +3,9 @@
 # in the extreme case where p is prime, n=p^nn. Such lists are permutations may be useful for analyzing block ciphers where the round keys have small block size (such as 32 bit)
 # and small round key size (such as 1 bit).
 
+# There are algorithms that are able to produce new nilpotent matrices from old ones, but these soft-algorithms cannot easily take a matrix that is not nilpotent and make it
+# nilpotent.
+
 # We have found maps L(f_1)+...+L(f_p) which are nilpotent of nullity 1 when p=2,3<=nn<=5 or when p=3,2<=nn<=3 or when p=5,nn=2.
 
 # Here is the data for when p=2,nn=5.
