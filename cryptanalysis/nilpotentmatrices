@@ -45,7 +45,8 @@ kk:=Random([1..n]); r:=Remove(newlist[a]); s:=Remove(newlist[b]); Add(newlist[a]
 if ph>0 then list:=newlist; Display(ph); fi; 
 od;
 
-# The following code minimizes the degree of the matrix until the matrix is of minimum degree.
+# For the following code, one starts off with a nilpotent matrix, and the program minimizes the degree of the matrix until the matrix is of minimum degree.
+# The code works when p=2,nn=7, but it may fall into a local minimum, so one will need to get the loop out of a local minimum manually.
 
 superscore:=function(nn,list) local n,xx,i,a; n:=Length(list); xx:=List([1..n],v->[1..n]*0); 
 for i in [1..n] do for a in list[i] do xx[i][a]:=xx[i][a]+1; od; od; return Sum(List(xx^n-1,v->v*v)); end;
