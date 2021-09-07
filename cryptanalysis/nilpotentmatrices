@@ -45,5 +45,17 @@ kk:=Random([1..n]); r:=Remove(newlist[a]); s:=Remove(newlist[b]); Add(newlist[a]
 if ph>0 then list:=newlist; Display(ph); fi; 
 od;
 
+# The following code minimizes the degree of the matrix until the matrix is of minimum degree.
 
+superscore:=function(nn,list) local n,xx,i,a; n:=Length(list); xx:=List([1..n],v->[1..n]*0); 
+for i in [1..n] do for a in list[i] do xx[i][a]:=xx[i][a]+1; od; od; return Sum(List(xx^n-1,v->v*v)); end;
 
+while true do 
+ii:=Random([1..n]); SortBy(list[ii],v->Random([1..n])); newlist:=StructuralCopy(list); a:=Random([1..n]); b:=a; 
+while a=b do a:=Random([1..n]); od; 
+kk:=Random([1..n]); r:=Remove(newlist[a]); s:=Remove(newlist[b]); Add(newlist[a],s); Add(newlist[b],r); ph:=score(newlist); 
+if ph>0 then pak:=score(newlist)*superscore(nn,newlist); if pak<=00+superscore(nn,list)*score(list) 
+#if ph>0 then pak:=superscore(nn,newlist); if pak<=superscore(nn,list)+20 
+then list:=newlist; Display(ph); xx:=[]; for i in [1..n] do xx[i]:=[]; for j in [1..2*n] do xx[i][j]:=' '; od; for a in list[i] do xx[i][a]:='T'; od; od; Display(xx); Display(ph); Display(pak);
+fi; fi; 
+od;
