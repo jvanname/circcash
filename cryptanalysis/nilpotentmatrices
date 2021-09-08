@@ -49,7 +49,7 @@ od;
 # The code works when p=2,nn=7, but it may fall into a local minimum, so one will need to get the loop out of a local minimum manually.
 
 superscore:=function(nn,list) local n,xx,i,a; n:=Length(list); xx:=List([1..n],v->[1..n]*0); 
-for i in [1..n] do for a in list[i] do xx[i][a]:=xx[i][a]+1; od; od; return Sum(List(xx^n-1,v->v*v)); end;
+for i in [1..n] do for a in list[i] do xx[i][a]:=xx[i][a]+1; od; od; return Sum(List(xx^nn-1,v->v*v)); end;
 
 while true do 
 ii:=Random([1..n]); SortBy(list[ii],v->Random([1..n])); newlist:=StructuralCopy(list); a:=Random([1..n]); b:=a; 
