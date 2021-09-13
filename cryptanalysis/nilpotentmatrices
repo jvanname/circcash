@@ -18,6 +18,32 @@
 # here is the data when p=5;nn=2.
 #[ [ 1, 2, 3, 5, 18 ], [ 4, 7, 11, 13, 17 ], [ 8, 9, 16, 19, 19 ], [ 5, 6, 12, 12, 20 ], [ 9, 12, 21, 22, 23 ], [ 1, 2, 3, 4, 9 ], [ 6, 7, 8, 11, 24 ], [ 4, 6, 13, 15, 15 ], [ 10, 16, 17, 18, 19 ], [ 21, 22, 23, 24, 25 ], [ 1, 2, 3, 8, 23 ], [ 9, 14, 15, 15, 24 ], [ 5, 11, 13, 20, 20 ], [ 9, 10, 16, 17, 18 ], [ 14, 20, 21, 22, 23 ], [ 2, 3, 4, 6, 14 ], [ 1, 5, 8, 10, 25 ], [ 7, 11, 12, 13, 14 ], [ 10, 16, 17, 18, 19 ], [ 7, 21, 22, 24, 25 ], [ 1, 2, 4, 13, 25 ], [ 3, 5, 12, 20, 24 ], [ 6, 7, 8, 11, 19 ], [ 10, 14, 16, 17, 18 ], [ 15, 21, 22, 23, 25 ] ]
 
+# matrixsort puts the matrix in a special form so that it is easy to understand.
+
+matrixsort:=function(oldlist)
+local n,i,j,c,newlist,list,output;
+n:=Length(oldlist);
+list:=StructuralCopy(oldlist);
+while Length(list[1])<Length(list) do
+newlist:=[];
+for i in [1..n] do 
+newlist[i]:=[];
+for a in oldlist[i] do
+Append(newlist[i],list[a]);
+od;
+od;
+list:=newlist;
+od;
+par:=list[1];
+invpar:=[]; for i in [1..n] do invpar[par[i]]:=i; od;
+
+output:=[]; for i in [1..n] do output[i]:=List(oldlist[par[i]],v->invpar[v]); od;
+return output;
+end;
+
+
+
+
 onemodulo:=function(x,y) return RemInt(x-1,y)+1; end;
 
 score:=function(array) 
@@ -46,6 +72,7 @@ if ph>0 then list:=newlist; Display(ph); fi;
 od;
 
 # For the following code, one starts off with a nilpotent matrix, and the program minimizes the degree of the matrix until the matrix is of minimum degree.
+# In the following code, the matrix is kept nilpotent all the time.
 # The code works when p=2,nn=7, but it may fall into a local minimum, so one will need to get the loop out of a local minimum manually.
 
 superscore:=function(nn,list) local n,xx,i,a; n:=Length(list); xx:=List([1..n],v->[1..n]*0); 
@@ -59,4 +86,46 @@ if ph>0 then pak:=score(newlist)*superscore(nn,newlist); if pak<=00+superscore(n
 #if ph>0 then pak:=superscore(nn,newlist); if pak<=superscore(nn,list)+20 
 then list:=newlist; Display(ph); xx:=[]; for i in [1..n] do xx[i]:=[]; for j in [1..2*n] do xx[i][j]:=' '; od; for a in list[i] do xx[i][a]:='T'; od; od; Display(xx); Display(ph); Display(pak);
 fi; fi; 
+od;
+
+
+# It is not very feasible to nilpotent 0-1 matrices simply by declaring the loss function to be 
+# the spectral radius and then minimizing this loss function. However, one can produce 0-1 
+# matrices A such that A^k is the matrix where each entry is 1 by declaring the loss function of a
+# matrix A to be the distance from A^k to the all ones matrix.
+
+sortscore:=function(oldlist)
+local n,i,j,c,newlist,list;
+n:=Length(oldlist);
+list:=StructuralCopy(oldlist);
+while Length(list[1])<Length(list) do
+newlist:=[];
+for i in [1..n] do 
+newlist[i]:=[];
+for a in oldlist[i] do
+Append(newlist[i],list[a]);
+od;
+od;
+list:=newlist;
+od;
+
+c:=0;
+for i in [1..n] do
+Sort(list[i]);
+for j in [1..n-1] do
+if list[i][j]=list[i][j+1] then c:=c+1; fi;
+od;
+od;
+return c;
+end;
+
+
+n:=64; list:=[]; for i in [1..63] do list[i]:=[i,i+1]; od; list[64]:=[64,1];
+
+ph:=sortscore(list);
+while true do 
+ii:=Random([1..n]); SortBy(list[ii],v->Random([1..n])); newlist:=StructuralCopy(list); a:=Random([1..n]); b:=a; 
+while a=b do a:=Random([1..n]); od; 
+kk:=Random([1..n]); r:=Remove(newlist[a]); s:=Remove(newlist[b]); Add(newlist[a],s); Add(newlist[b],r); qh:=sortscore(newlist); 
+if qh<=ph+Random([0..Random([0..10])]) then list:=newlist; ph:=qh; Display(ph); fi;
 od;
