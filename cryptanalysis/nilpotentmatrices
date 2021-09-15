@@ -40,7 +40,9 @@ if i in oldlist[i] then Add(fix,i); fi;
 od;
 
 par:=list[Random(fix)];
-invpar:=[]; for i in [1..n] do invpar[par[i]]:=i; od;
+invpar:=[1..n]*0; for i in [1..n] do invpar[par[i]]:=i; od;
+
+if 0 in invpar then return oldlist; fi;
 
 output:=[]; for i in [1..n] do output[i]:=List(oldlist[par[i]],v->invpar[v]); od;
 return output;
