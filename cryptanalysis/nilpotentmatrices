@@ -21,7 +21,7 @@
 # matrixsort puts the matrix in a special form so that it is easy to understand.
 
 matrixsort:=function(oldlist)
-local n,i,j,c,newlist,list,output;
+local n,i,j,c,newlist,list,output,fix,par,invpar;
 n:=Length(oldlist);
 list:=StructuralCopy(oldlist);
 while Length(list[1])<Length(list) do
@@ -34,7 +34,12 @@ od;
 od;
 list:=newlist;
 od;
-par:=list[1];
+fix:=[];
+for i in [1..n] do
+if i in oldlist[i] then Add(fix,i); fi;
+od;
+
+par:=list[Random(fix)];
 invpar:=[]; for i in [1..n] do invpar[par[i]]:=i; od;
 
 output:=[]; for i in [1..n] do output[i]:=List(oldlist[par[i]],v->invpar[v]); od;
