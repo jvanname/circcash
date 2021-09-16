@@ -20,10 +20,14 @@
 
 # matrixsort puts the matrix in a special form so that it is easy to understand.
 
+selectpermutations:=function(oldlist) local rem,list,n,r,output,i,j,k; list:=StructuralCopy(oldlist); n:=Length(list); r:=Length(list[1]); output:=[]; 
+for i in [1..n] do output[i]:=[]; od; for i in [1..r] do rem:=[1..n]*0; for j in [1..n] do for k in [1..Length(list[j])] do if rem[list[j][k]]=0 then break; fi; od; 
+rem[list[j][k]]:=1; output[j][i]:=list[j][k]; list[j][k]:=list[j][Length(list[j])]; Remove(list[j]); od; od; return output; end;
+
 matrixsort:=function(oldlist)
 local n,i,j,c,newlist,list,output,fix,par,invpar;
 n:=Length(oldlist);
-list:=StructuralCopy(oldlist);
+list:=selectpermutations(oldlist);
 while Length(list[1])<Length(list) do
 newlist:=[];
 for i in [1..n] do 
