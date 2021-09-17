@@ -1,0 +1,41 @@
+# We factor the matrix with all 1's into a product of several 0-1 matrices.
+
+sortscorefactorize:=function(array)
+local n,i,j,c,newlist,list;
+n:=Length(array[1]);
+list:=StructuralCopy(array[1]);
+for k in [2..Length(array)] do
+newlist:=[];
+for i in [1..n] do 
+newlist[i]:=[];
+for a in array[k][i] do
+Append(newlist[i],list[a]);
+od;
+od;
+list:=newlist;
+od;
+
+c:=0;
+for i in [1..n] do
+Sort(list[i]);
+for j in [1..n-1] do
+if list[i][j]=list[i][j+1] then c:=c+1; fi;
+od;
+od;
+return c;
+end;
+
+
+p:=2; nn:=6; n:=p^nn; 
+list:=[]; for i in [1..n-1] do list[i]:=[i,i+1]; od; list[n]:=[n,1];
+array:=List([1..nn],v->StructuralCopy(list));
+
+ph:=sortscorefactorize(array);
+while true do 
+ii:=Random([1..n]); jj:=Random([1..nn]); SortBy(array[jj][ii],v->Random([1..n])); 
+newarray:=StructuralCopy(array); a:=Random([1..n]); b:=a; 
+while a=b do a:=Random([1..n]); od; 
+kk:=Random([1..nn]); 
+r:=Remove(newarray[kk][a]); s:=Remove(newarray[kk][b]); Add(newarray[kk][a],s); Add(newarray[kk][b],r); qh:=sortscorefactorize(newarray); 
+if qh<=ph+Random([0..Random([0..Random([0..Random([0..10])])])]) then array:=newarray; ph:=qh; Display(ph); fi;
+od;
