@@ -1,7 +1,7 @@
 # We factor the matrix with all 1's into a product of several 0-1 matrices.
 
 sortscorefactorize:=function(array)
-local n,i,j,c,newlist,list;
+local n,i,j,c,newlist,list,mak;
 n:=Length(array[1]);
 list:=StructuralCopy(array[1]);
 for k in [2..Length(array)] do
@@ -18,13 +18,20 @@ od;
 c:=0;
 for i in [1..n] do
 Sort(list[i]);
-for j in [1..n-1] do
-if list[i][j]=list[i][j+1] or list[i][j+1]>list[i][j]+1 then c:=c+1; fi;
+mak:=[1..n]*0+1;
+for j in [1..Length(list[i])-1] do
+if list[i][j]=list[i][j+1] then c:=c+1; fi;
+mak[list[i][j]]:=0;
 od;
+if Length(list[i])>0 then mak[list[i][Length(list[i])]]:=0; fi;
+c:=c+Sum(mak);
 od;
+
 return c;
 end;
 
+# Here, the code factorizes the all 1's matrix into products of 0,1 matrices where the factors are always products of doubly stochastic matrices.
+# In this case, the factorization of the 1's matrix into a product of 0,1 matrices is easier than if we do not require the factors to be doubly stochastic.
 
 p:=2; nn:=6; n:=p^nn; 
 list:=[]; for i in [1..n-1] do list[i]:=[i,i+1]; od; list[n]:=[n,1];
@@ -38,4 +45,44 @@ while a=b do a:=Random([1..n]); od;
 kk:=Random([1..nn]); 
 r:=Remove(newarray[kk][a]); s:=Remove(newarray[kk][b]); Add(newarray[kk][a],s); Add(newarray[kk][b],r); qh:=sortscorefactorize(newarray); 
 if qh<=ph+Random([0..Random([0..Random([0..Random([0..10])])])]) then array:=newarray; ph:=qh; Display(ph); fi;
+od;
+
+
+
+
+# Here, the code factorizes the all 1's matrix into products of 0,1 matrices where the factors are not necessarily products of doubly stochastic matrices.
+# In this case, the factorization of the 1's matrix into a product of 0,1 matrices is much more difficult.
+
+n:=31;
+nn:=3;
+list:=[]; for i in [1..n] do list[i]:=[]; od;
+array:=List([1..nn],v->StructuralCopy(list));
+ph:=sortscorefactorize(array);
+while true do 
+ii:=Random([1..n]); jj:=Random([1..nn]); SortBy(array[jj][ii],v->Random([1..n])); 
+newarray:=StructuralCopy(array); a:=Random([1..n]); b:=a; 
+while a=b do a:=Random([1..n]); od; 
+hakk:=0;
+kk:=Random([1..nn]); 
+if Random([1..2])>1 then 
+if Length(newarray[kk][a])>0 and Length(newarray[kk][b])>0 then
+r:=Remove(newarray[kk][a]); s:=Remove(newarray[kk][b]); Add(newarray[kk][a],s); Add(newarray[kk][b],r); 
+fi;
+else
+if Random([true,false]) then
+if Length(newarray[kk][a])>0 then Remove(newarray[kk][a]); 
+hakk:=1;
+fi;
+else
+if Length(newarray[kk][a])<n then Add(newarray[kk][a],Random(Difference([1..n],newarray[kk][a]))); hakk:=1;
+fi;
+fi;
+fi;
+qh:=sortscorefactorize(newarray); 
+mah:=0;
+if Random([1..1000])=1 then mah:=20; fi;
+if qh<=ph+mah then array:=newarray; ph:=qh; Display([ph,hakk]); 
+Display(Sum(List(array,v->Sum(List(v,Sum)))));
+fi;
+if ph=0 then break; fi;
 od;
