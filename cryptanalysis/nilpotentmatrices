@@ -107,7 +107,7 @@ od;
 # matrix A to be the distance from A^k to the all ones matrix.
 
 sortscore:=function(oldlist)
-local n,i,j,c,newlist,list;
+local a,n,i,j,c,newlist,list;
 n:=Length(oldlist);
 list:=StructuralCopy(oldlist);
 while Length(list[1])<Length(list) do
