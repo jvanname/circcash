@@ -141,3 +141,47 @@ while a=b do a:=Random([1..n]); od;
 kk:=Random([1..n]); r:=Remove(newlist[a]); s:=Remove(newlist[b]); Add(newlist[a],s); Add(newlist[b],r); qh:=sortscore(newlist); 
 if qh<=ph+Random([0..Random([0..10])]) then list:=newlist; ph:=qh; Display(ph); fi;
 od;
+
+# The following evolutionary algorithm allows 100 matrices to be optimized simulataneously (matrices are close enough so that an optimization that works for one matrix will
+# work for other matrices).
+#
+
+n:=64; xx:=[]; for i in [1..63] do xx[i]:=[i,i+1]; od; xx[64]:=[64,1];
+
+list:=List([1..100],v->xx);
+
+ph:=infinity;
+while true do 
+if Random([1..100])=1 then ph:=sortscore(Random(list)); fi;
+
+al:=Random([1..2]);
+bl:=Random([1..2]);
+a:=Random([1..n]); b:=a; 
+while a=b do a:=Random([1..n]); od; 
+x:=StructuralCopy(Random(list));
+r:=x[a][al]; s:=x[b][bl]; x[a][al]:=s; x[b][bl]:=r; 
+if r=s then continue; fi;
+qh:=sortscore(x);
+if qh<=ph then
+Display(ph);
+for ii in [1..100] do 
+x:=StructuralCopy(list[ii]);
+r:=x[a][al]; s:=x[b][bl]; x[a][al]:=s; x[b][bl]:=r; 
+if sortscore(x)<=ph then 
+if Random([1..2])=1 then Add(list,x); else list[ii]:=x; fi;
+
+Print("+");
+else
+Print(" ");
+fi;
+od;
+Display("!");
+while Length(list)>100 do list[Random([1..100])]:=Remove(list); od;
+if Random([1..1])=0 then 
+xx:=List([1..n],v->[1..n]*0); mar:=Random([1..100]); for iig in [1..n] do for aag in list[mar]
+[iig] do xx[iig][aag]:=1; od; od; Display(xx*Z(2));
+fi;
+ph:=qh;
+fi;
+od;
+
