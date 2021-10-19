@@ -10,6 +10,26 @@ quicktest:=function(rounds,list) local n,nn,i,j,sink; n:=Length(list); nn:=LogIn
 for i in [1..rounds] do sink:=[Random([1..n])]; for j in [1..nn] do sink:=Concatenation(List(sink,v->list[v][1]),List(sink,v->list[v][2])); od; 
 Sort(sink); for j in [1..n-1] do if sink[j]=sink[j+1] then return false; fi; od; od; return true; end;
 
+scoretest:=function(array) 
+local a,p,n,list,i,k,newlist,j,c,nn; 
+p:=Primes[Random([40..168])]; n:=Length(array); nn:=LogInt(n,Length(array[1]));
+if not Length(array[1])^nn=n then return n; fi;
+
+list:=[]; 
+for i in [1..n] do list[i]:=Random(GF(p)); od; list[1]:=list[1]-Sum(list); 
+for k in [1..nn] do newlist:=[]; 
+for j in [1..n] do newlist[j]:=0; 
+for a in array[j] do 
+newlist[j]:=newlist[j]+list[a]; 
+od; od; 
+list:=newlist;  
+od; 
+c:=0;
+for i in [1..n] do if not list[i]=list[i]*0 then c:=c+1; fi; od;
+return c;
+end;
+
+
 shift:=function(list) local i,newlist,n; n:=Length(list); newlist:=[]; for i in [2..n] do newlist[i]:=list[i-1]; od; newlist[1]:=list[n]; return newlist; end;
 
 map:=function(n,x) local i,list; list:=[]; for i in Reversed([1..n]) do if x>2^(i-1) then x:=x-2^(i-1); list[i]:=1; else list[i]:=0; fi; od; return list; end;
@@ -49,5 +69,41 @@ if Random([1..10])=1 then
 xx:=List([1..n],v->[1..n]*0); mar:=Random([1..Length(list)]); for iig in [1..n] do for aag in list[mar]
 [iig] do xx[iig][aag]:=1; od; od; Display(xx*Z(2)); Display(Length(list));
 fi;
+fi;
+od;
+
+p:=2; nn:=6;; n:=p^nn; list:=List([1..100],u->List([1..n],v->[onemodulo((v-1)*p+1,n)..onemodulo(v*p,n)]));;
+ph:=1;
+while true do 
+if Random([1..100])=1 then ph:=scoretest(Random(list)); fi;
+
+al:=Random([1..2]);
+bl:=Random([1..2]);
+a:=Random([1..n]); b:=a; 
+while a=b do a:=Random([1..n]); od; 
+x:=StructuralCopy(Random(list));
+r:=x[a][al]; s:=x[b][bl]; x[a][al]:=s; x[b][bl]:=r; 
+if r=s then continue; fi;
+qh:=scoretest(x);
+if qh<=ph then
+#Display(ph);
+for ii in [1..100] do 
+x:=StructuralCopy(list[ii]);
+r:=x[a][al]; s:=x[b][bl]; x[a][al]:=s; x[b][bl]:=r; 
+if scoretest(x)<=ph then 
+if Random([1..2])=1 then Add(list,x); else list[ii]:=x; fi;
+
+#Print("+");
+else
+#Print(" ");
+fi;
+od;
+#Display("!");
+while Length(list)>100 do list[Random([1..100])]:=Remove(list); od;
+if Random([1..10])=1 then 
+xx:=List([1..n],v->[1..n]*0); mar:=Random([1..100]); for iig in [1..n] do for aag in list[mar]
+[iig] do xx[iig][aag]:=1; od; od; Display(xx*Z(2)); Display(ph);
+fi;
+ph:=qh;
 fi;
 od;
