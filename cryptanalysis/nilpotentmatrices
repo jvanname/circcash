@@ -185,3 +185,18 @@ ph:=qh;
 fi;
 od;
 
+#ranktest,match,mix,recombination are functions that are used for recombination. Unfortunately, after recombination, the fitness of an individual matrix tends to decrease, but
+#the decrease in fitness is reasonable enough so that recombination of matrices may still be a useful operation.
+#I have a very sloppy inefficient algorithm for finding permutations that witness that the matrix has a non-zero permanent, but I do not have the motivation to find and make a faster
+#algorithm.
+
+ranktest:=function(perm,list) local a,xx,p,n,park,invpark,m,i,lp; n:=Length(list); lp:=Length(perm); if n=lp then return true; fi; park:=Difference([1..n],perm); invpark:=[1..n]*0; m:=Length(park); for i in [1..m] do invpark[park[i]]:=i; od; p:=71; xx:=List([1..m],v->[1..m]*0*Z(p)); for i in [1..m] do for a in list[i+lp] do if invpark[a]>0 then xx[i][invpark[a]]:=Random(GF(p)); fi; od; od; if Determinant(xx)=Z(p)*0 then return false; else return true; fi; end;
+
+match:=function(list) local output,carm,a,ii,n,cc; cc:=0; n:=Length(list); output:=[]; carm:=[1..n]*0; while Length(output)<n do ii:=Length(output)+1; a:=Random(list[ii]); if carm[a]=0 then if ranktest(Concatenation(output,[a]),list) 
+then carm[a]:=1; Add(output,a); cc:=0; fi; fi; cc:=cc+1; 
+if cc>=10 then return false; fi;
+od; return output; end;
+
+mix:=function(m,list) local n,arm,output,i,j; n:=Length(list); output:=List([1..n],v->[]); for i in [1..m] do arm:=match(list); if arm=false then return false; fi;for j in [1..n] do Add(output[j],arm[j]); list[j]:=Difference(list[j],[arm[j]]); od; od; return output; end;
+
+recombination:=function(one,two) return mix(Length(one[1]),List(TransposedMat([one,two]),Concatenation)); end; 
