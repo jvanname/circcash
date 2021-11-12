@@ -1,1 +1,47 @@
+pairfunctor:=function(arm)
+local n,m,nn,list,invlist,superarm,i,j,aa;
+
+n:=Length(arm);
+m:=Length(arm[1]);
+nn:=n*(n-1)/2;
+
+list:=[]; for i in [1..n] do for j in [1..i-1] do Add(list,[i,j]); od; od;
+invlist:=[]; for i in [1..n] do invlist[i]:=List([1..n],v->0); od; for i in [1..nn] do invlist[list[i][1]][list[i][2]]:=i; invlist[list[i][2]][list[i][1]]:=i; od;
+
+superarm:=[]; for i in [1..nn] do superarm[i]:=[]; aa:=list[i]; for j in [1..m] do  superarm[i][j]:=invlist[arm[aa[1]][j]][arm[aa[2]][j]]; od; od;
+
+return superarm;
+end;
+
+spectralscore:=function(nar,testvalues,pairs)
+local list,n,kk,newlist,i,j,m;
+
+list:=StructuralCopy(testvalues);
+n:=Length(list);
+m:=Length(pairs[1]);
+for kk in [1..nar] do
+newlist:=[];
+for i in [1..n] do
+newlist[i]:=0;
+for j in [1..m] do 
+newlist[i]:=newlist[i]+list[pairs[i][j]];
+od;
+od;
+list:=newlist;
+od;
+return Sum(List(list,AbsInt)); 
+end;
+
+pairscore:=function(nar,testvalues,arm)
+return spectralscore(nar,testvalues,pairfunctor(arm));
+end;
+
+marksplit:=function(list) local n,output,i,j; n:=LogInt(Length(list),2); output:=[]; for i in [1..n] do output[i]:=[]; for j in [1..2^(i-1)] do output[i][j]:=Remove(list); od; od; return Reversed(output); end;
+
+
+
+
+
+
+
 
