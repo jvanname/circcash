@@ -77,8 +77,42 @@ od;
 return pairs;
 end;
 
+nn:=128;
 
+population:=List([1..100],v->Concatenation([1..nn/2]*0,[1..nn/2]*0+1));
 
+testvalues:=[1..nn*(nn-1)/2]*0; 
 
+for i in [1..nn*(nn-1)/2] do a:=Random([1..nn*(nn-1)/2]); testvalues[a]:=testvalues[a]+1; a:=Random([1..nn*(nn-1)/2]); testvalues[a]:=testvalues[a]-1; od;
+
+while true do 
+for i in [1..100] do
+new:=[];
+a:=Random([1..10]);
+b:=Random([1..10]);
+for j in [1..nn] do
+if Random([true,false]) then new[j]:=population[a][j]; else new[j]:=population[b][j]; fi;
+od;
+c:=Random([1..nn]); new[c]:=1-new[c];
+Add(population,new);
+od;
+
+testvalues:=[1..nn*(nn-1)/2]*0; 
+for i in [1..nn*(nn-1)/2] do a:=Random([1..nn*(nn-1)/2]); testvalues[a]:=testvalues[a]+1; a:=Random([1..nn*(nn-1)/2]); testvalues[a]:=testvalues[a]-1; od;
+
+SortBy(population,v->pairscore(100,testvalues,bitstopairs(v)));
+
+while Length(population)>10 do Remove(population); od;
+
+#kk:=1000;
+#Display(pairscore(kk,testvalues,bitstopairs(population[1]))^(1./kk));
+
+axe:=[]; 
+for i in [1..10] do
+axe[i]:=[];
+for j in [1..nn] do if population[i][j]=1 then axe[i][j]:='T'; else axe[i][j]:=' '; fi; od;
+od;
+Display(axe);
+od;
 
 
