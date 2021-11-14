@@ -116,3 +116,4 @@ Display(axe);
 od;
 
 
+normalform:=function(pair) local aa,output,bb,lar,kk,fix,nn,n,a,list,invlist; fix:=fixedpoints(pair); nn:=Length(pair); n:=LogInt(nn,2); a:=Random(fix); aa:=a[1]; list:=[]; invlist:=[]; for i in [1..nn] do lar:=map(n,i); bb:=aa; for kk in Reversed([1..n]) do bb:=pair[bb][lar[kk]+1]; od; list[i]:=bb; invlist[bb]:=i; od; output:=[]; for i in [1..nn] do output[i]:=[]; for j in [1..2] do output[i][j]:=invlist[pair[list[i]][j]]; od; od; return output; end;
