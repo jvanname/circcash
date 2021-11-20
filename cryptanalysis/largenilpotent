@@ -107,3 +107,13 @@ fi;
 ph:=qh;
 fi;
 od;
+
+randmap:=function(list) local n,i; n:=Length(list); for i in [2..n] do list[i]:=RemInt(23*list[i]+37*list[i-1],727); od; for i in Reversed([1..n-1]) do list[i]:=RemInt(47*list[i]+17*list[i+1],109); od; return RemInt(Sum(list),2); end;
+
+promote:=function(randmap,list) local n,i,j,mar; n:=Length(list); for i in [1..n] do mar:=[]; for j in [i+1..n] do Add(mar,list[j]); od; list[i]:=RemInt(list[i]+randmap(mar),2); od; return list; end;
+
+inversepromote:=function(randmap,list) local n,i,j,mar; n:=Length(list); for i in Reversed([1..n]) do mar:=[]; for j in [i+1..n] do Add(mar,list[j]); od; list[i]:=RemInt(list[i]+randmap(mar),2); od; return list; end;
+
+
+
+
