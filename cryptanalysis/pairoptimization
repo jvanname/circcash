@@ -115,7 +115,8 @@ od;
 Display(axe);
 od;
 
+fixedpoints:=function(pair) local n,output,i,j; n:=Length(pair); output:=[]; for i in [1..n] do for j in [1..2] do if pair[i][j]=i then Add(output,[i,j-1]); fi; od; od; return output; end;
 
- normalform:=function(pair) local aa,output,bb,lar,kk,fix,nn,n,a,list,invlist,totality; fix:=fixedpoints(pair); nn:=Length(pair); n:=LogInt(nn,2); totality:=[]; for a in fix do aa:=a[1]; list:=[]; invlist:=[]; for i in [1..nn] do lar:=map(n,i); bb:=aa; for kk in Reversed([1..n]) do bb:=pair[bb][lar[kk]+1]; od; list[i]:=bb; invlist[bb]:=i; od; output:=[]; for i in [1..nn] do output[i]:=[]; for j in [1..2] do output[i][j]:=invlist[pair[list[i]][j]]; od; od; Add(totality,output); od; return totality; end;
+normalform:=function(pair) local aa,output,bb,lar,kk,fix,nn,n,a,list,invlist,totality; fix:=fixedpoints(pair); nn:=Length(pair); n:=LogInt(nn,2); totality:=[]; for a in fix do aa:=a[1]; list:=[]; invlist:=[]; for i in [1..nn] do lar:=map(n,i); bb:=aa; for kk in Reversed([1..n]) do bb:=pair[bb][lar[kk]+1]; od; list[i]:=bb; invlist[bb]:=i; od; output:=[]; for i in [1..nn] do output[i]:=[]; for j in [1..2] do output[i][j]:=invlist[pair[list[i]][j]]; od; od; Add(totality,output); od; return totality; end;
 
- makebinaryfunction:=function(pair,bit,x) return map(Length(x),pair[invmap(x)][bit+1]); end;
+makebinaryfunction:=function(pair,bit,x) return map(Length(x),pair[invmap(x)][bit+1]); end;
