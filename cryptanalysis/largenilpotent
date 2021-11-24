@@ -114,6 +114,13 @@ promote:=function(randmap,list) local n,i,j,mar; n:=Length(list); for i in [1..n
 
 inversepromote:=function(randmap,list) local n,i,j,mar; n:=Length(list); for i in Reversed([1..n]) do mar:=[]; for j in [i+1..n] do Add(mar,list[j]); od; list[i]:=RemInt(list[i]+randmap(mar),2); od; return list; end;
 
+roundmap:=function(randmap,bit,list) local newlist; newlist:=promote(randmap,shift(list)); newlist[1]:=RemInt(newlist[1]+bit,2); return newlist; end;
+
+invshift:=function(list) local i,newlist,n; n:=Length(list); newlist:=[]; for i in [1..n-1] do newlist[i]:=list[i+1]; od; newlist[n]:=list[1]; return newlist; end;
+
+invroundmap:=function(randmap,bit,list) local newlist,midlist; midlist:=StructuralCopy(list); midlist[1]:=RemInt(midlist[1]+bit,2); return invshift(inversepromote(randmap,midlist)); end;
+
+fixedpoint:=function(bit,n,randmap) local list,i,mar,j; list:=[]; list[n]:=bit; for i in Reversed([1..n-1]) do mar:=[]; for j in [i+1..n-1] do Add(mar,list[j]); od; list[i]:=RemInt(list[i+1]+randmap(mar),2); od; return list; end;
 
 
 
