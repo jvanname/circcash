@@ -18,10 +18,7 @@ include:
 * Being respectful of differing viewpoints and experiences
 * Focusing on what is best for the community
 * Showing empathy towards other community members
-* Using proper grammar, spelling, punctuation, and capitalization
-* Using clear and more formal language instead of slang
-
-Users are encouraged to use their real names and identities. Anonymous users are more likely to misbehave. Uers are also encouraged to sign their statements with their Circcash private keys.
+* Communicate clearly using proper grammar, spelling, punctuation, and capitalization
 
 Examples of unacceptable behavior by participants include:
 
@@ -32,6 +29,14 @@ Examples of unacceptable behavior by participants include:
  address, without explicit permission
 * Participating in hateful or offensive forums such as the unofficial Circcash server on Discord created on 11/14/2020
 * Other conduct which could reasonably be considered inappropriate in a professional setting
+
+## Recommended behavior (these are simply recommendations; entities will not be pressured into following these guidelines)
+
+Entities are encouraged to use their real names and identities. Anonymous users are more likely to misbehave, and all actions taken by anonymous entities will be viewed with suspicion.
+
+Entities are encouraged to sign their statements with their Circcash private keys using their Circcash wallets.
+
+Entities are encouraged to understand and be interested in topics such as cryptocurrency technologies, cryptography, and reversible computation according to their abilities. 
 
 ## Our Responsibilities
 
