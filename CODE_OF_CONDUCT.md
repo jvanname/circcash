@@ -21,6 +21,8 @@ include:
 * Using proper grammar, spelling, punctuation, and capitalization
 * Using clear and more formal language instead of slang
 
+Users are encouraged to use their real names and identities. Anonymous users are more likely to misbehave. Uers are also encouraged to sign their statements with their Circcash private keys.
+
 Examples of unacceptable behavior by participants include:
 
 * The use of sexualized language or imagery and sexual attention or advances
