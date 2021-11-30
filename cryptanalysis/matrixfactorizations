@@ -86,3 +86,15 @@ Display(Sum(List(array,v->Sum(List(v,Sum)))));
 fi;
 if ph=0 then break; fi;
 od;
+
+# The code listed below can be used to produce factorizations of 2^n by 2^n Hadamard matrices into the product of n different weighing matrices with weight 2.
+# 
+rev:=function(x) local n,y,i,a; n:=Length(x); y:=List([1..n],v->[]); for i in [1..64] do for a in x[i] do Add(y[a],i); od; od; return y; end;
+
+ultrarev:=function(x) return Reversed(List(x,rev)); end;
+
+x:=List([1..6],v->List([1..64],v->[onemodulo(2*v-1,64),onemodulo(2*v,64)]));
+
+for j in [1..7] do for i in [1..6] do SortBy(x[i],v->Random([1..9^9])); od; x:=ultrarev(x); od;
+
+p:=sortscorefactorize(x); while true do if Random([1..64])=1 then x:=ultrarev(x); p:=sortscorefactorize(x); fi; xx:=StructuralCopy(x); ii:=Random([1..6]); aa:=Random([1..64]); bb:=Random([1..64]); rr:=xx[ii][aa]; ss:=xx[ii][bb]; xx[ii][aa]:=ss; xx[ii][bb]:=rr; q:=sortscorefactorize(xx); if q<=p then x:=xx; p:=q; Display(p); fi; od;
