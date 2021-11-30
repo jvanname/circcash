@@ -200,3 +200,9 @@ od; return output; end;
 mix:=function(m,list) local n,arm,output,i,j; n:=Length(list); output:=List([1..n],v->[]); for i in [1..m] do arm:=match(list); if arm=false then return false; fi;for j in [1..n] do Add(output[j],arm[j]); list[j]:=Difference(list[j],[arm[j]]); od; od; return output; end;
 
 recombination:=function(one,two) return mix(Length(one[1]),List(TransposedMat([one,two]),Concatenation)); end; 
+
+
+p:=2; nn:=6; n:=p^nn; x:=List([1..n],v->[onemodulo((v-1)*p+1,n)..onemodulo(v*p,n)]);
+
+p:=sortscore(x); while true do if p=0 then break; fi; p:=p+1; if Random([1..100])=1 then x:=rev(x); p:=sortscore(x); fi; xx:=StructuralCopy(x); aa:=Random([1..n]); bb:=Random([1..n]); rr:=xx[aa]; ss:=xx[bb]; xx[aa]:=ss; xx[bb]:=rr; q:=sortscore(xx); if q<=p then p:=q; x:=xx; Display(p); fi; od;
+
