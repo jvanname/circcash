@@ -201,8 +201,9 @@ mix:=function(m,list) local n,arm,output,i,j; n:=Length(list); output:=List([1..
 
 recombination:=function(one,two) return mix(Length(one[1]),List(TransposedMat([one,two]),Concatenation)); end; 
 
+# The following code uses evolutionary computation to produce examples of weighing matrices (with weight 2) that are roots of hadamard matrices.
 
 p:=2; nn:=6; n:=p^nn; x:=List([1..n],v->[onemodulo((v-1)*p+1,n)..onemodulo(v*p,n)]);
-
 p:=sortscore(x); while true do if p=0 then break; fi; p:=p+1; if Random([1..100])=1 then x:=rev(x); p:=sortscore(x); fi; xx:=StructuralCopy(x); aa:=Random([1..n]); bb:=Random([1..n]); rr:=xx[aa]; ss:=xx[bb]; xx[aa]:=ss; xx[bb]:=rr; q:=sortscore(xx); if q<=p then p:=q; x:=xx; Display(p); fi; od;
+
 
