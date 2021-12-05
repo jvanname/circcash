@@ -98,3 +98,14 @@ x:=List([1..6],v->List([1..64],v->[onemodulo(2*v-1,64),onemodulo(2*v,64)]));
 for j in [1..7] do for i in [1..6] do SortBy(x[i],v->Random([1..9^9])); od; x:=ultrarev(x); od;
 
 p:=sortscorefactorize(x); while true do if Random([1..64])=1 then x:=ultrarev(x); p:=sortscorefactorize(x); fi; xx:=StructuralCopy(x); ii:=Random([1..6]); aa:=Random([1..64]); bb:=Random([1..64]); rr:=xx[ii][aa]; ss:=xx[ii][bb]; xx[ii][aa]:=ss; xx[ii][bb]:=rr; q:=sortscorefactorize(xx); if q<=p then x:=xx; p:=q; Display(p); fi; od;
+
+
+rownormal:=function(a,x) local y,i,n; n:=Length(x); y:=x*0; for i in [1..n] do y[i][i]:=x[a][i]; od; return x*y; end;
+
+columnnormal:=function(a,x) local y,i,n; n:=Length(x); y:=x*0; for i in [1..n] do y[i][i]:=x[i][a]; od; return y*x; end;
+
+hadamardinvariant:=function(x) local n,c,a,b,y,k; n:=Length(x); c:=0; for a in [1..n] do for b in [1..n] do for k in [0,1] do y:=rownormal(a,columnnormal(b,x)); if k=1 then y:=TransposedMat(y); fi; c:=c+Sum(List(y,v->RemInt(3*(n+Sum(v))/2,n)^3))^2; od; od; od; return c; end;
+
+
+
+
