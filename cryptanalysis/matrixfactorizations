@@ -106,6 +106,6 @@ columnnormal:=function(a,x) local y,i,n; n:=Length(x); y:=x*0; for i in [1..n] d
 
 hadamardinvariant:=function(x) local n,c,a,b,y,k; n:=Length(x); c:=0; for a in [1..n] do for b in [1..n] do for k in [0,1] do y:=rownormal(a,columnnormal(b,x)); if k=1 then y:=TransposedMat(y); fi; c:=c+Sum(List(y,v->RemInt(3*(n+Sum(v))/2,n)^3))^2; od; od; od; return c; end;
 
-
+makehadamard:=function(list) local a,n,lam,unlist,mik,xx; n:=Length(list); lam:=[1..n]; SortBy(lam,v->Random([1..1000])); unlist:=Unique(list); mik:=[1..n]*0+1; xx:=List([1..n],v->[1..n]*0); for a in lam do xx[a][list[a][1]]:=1; xx[a][list[a][2]]:=1;  if mik[list[a][1]]=1 then mik[list[a][1]]:=0; xx[a][list[a][Random([1,2])]]:=-1; fi; od; return xx; end;
 
 
