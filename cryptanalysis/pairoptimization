@@ -135,7 +135,6 @@ multibitfliptest:=function(rounds,pair) local qtip,n,nn,c,i,xx,yy,hh,aa; qtip:=r
 
 fastmultibitfliptest:=function(rounds,mm,qtip) local n,nn,c,i,xx,yy,hh,aa; n:=Length(pair); nn:=LogInt(n,2); c:=0; for i in [1..mm] do xx:=map(nn,Random([1..n])); yy:=StructuralCopy(xx); aa:=Random([1..nn]); yy[aa]:=1-yy[aa]; x:=invmap(xx); y:=invmap(yy); for jj in [1..rounds] do hh:=Random([1,2]); x:=qtip[x][hh]; y:=qtip[y][hh]; od; xx:=map(nn,x); yy:=map(nn,y); c:=c+Sum(List(xx+yy,v->RemInt(v,2))); od; return c; end;
 
-# The following function gives a value for a minimum number of rounds required for security.
-bitfliproundcount:=function(pair) local midcount,qtip,n,nn,lsize,round,maxcount,margin,tt; qtip:=randomform(pair); n:=Length(pair); nn:=LogInt(n,2); lsize:=1; round:=1; while lsize<=nn do round:=round+1; maxcount:=2^lsize*16; if lsize=nn then qtip:=randomform(pair); fi; midcount:=maxcount/2; margin:=Int(maxcount^0.5); tt:=fastmultibitfliptest(round,2^lsize,qtip); if tt>=midcount-margin and tt<=midcount+margin then lsize:=lsize+1; fi; od; return round; end;
-
+# The following function gives a (very low) value for a minimum number of rounds required for security.
+bitfliproundcount:=function(pair) local maxshort,midcount,qtip,n,nn,lsize,round,maxcount,margin,tt; qtip:=randomform(pair); n:=Length(pair); nn:=LogInt(n,2); lsize:=1; round:=1; maxshort:=1; while lsize<=nn do Display([lsize,round]); round:=round+1; maxcount:=2^lsize*16; if lsize=nn then qtip:=randomform(pair); fi; midcount:=maxcount/2; margin:=Int(maxcount^0.5); tt:=fastmultibitfliptest(round,2^lsize,qtip); if tt>=midcount-margin and tt<=midcount+margin then if lsize=nn-1 then round:=maxshort; fi; lsize:=lsize+1; else maxshort:=round; fi; od; return round; end;
 
