@@ -216,6 +216,7 @@ p:=sortscore(x); while true do if p=0 then break; fi; p:=p+1; if Random([1..100]
 
 
 # The following code can be used to determine when p(A) is the all 1's matrix where A is a 0-1 matrix and each coefficient of p is either 0 or 1.
+# Such matrices are harder to find than 0-1 matrices that are roots of the all 1's matrix.
 
 enhancedsortscore:=function(taplist,oldlist)
  local a,n,i,j,c,newlist,list,poly,ahh,akk;
