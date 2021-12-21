@@ -123,3 +123,4 @@ makebinaryfunction:=function(pair,bit,x) return map(Length(x),pair[invmap(x)][bi
 
 inverter:=function(pair) local n,newpair,i; n:=Length(pair); newpair:=[]; for i in [1..n] do newpair[i]:=[]; od; for i in [1..n] do for j in [1,2] do newpair[pair[i][j]][j]:=i; od; od; return newpair; end;
 
+completenormalform:=function(pair) return Concatenation(normalform(pair),normalform(inverter(pair))); end;
