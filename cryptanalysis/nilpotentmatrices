@@ -207,3 +207,51 @@ p:=2; nn:=6; n:=p^nn; x:=List([1..n],v->[onemodulo((v-1)*p+1,n)..onemodulo(v*p,n
 p:=sortscore(x); while true do if p=0 then break; fi; p:=p+1; if Random([1..100])=1 then x:=rev(x); p:=sortscore(x); fi; xx:=StructuralCopy(x); aa:=Random([1..n]); bb:=Random([1..n]); rr:=xx[aa]; ss:=xx[bb]; xx[aa]:=ss; xx[bb]:=rr; q:=sortscore(xx); if q<=p then p:=q; x:=xx; Display(p); fi; od;
 
 
+
+
+
+
+
+
+
+
+# The following code can be used to determine when p(A) is the all 1's matrix where A is a 0-1 matrix and each coefficient of p is either 0 or 1.
+
+enhancedsortscore:=function(taplist,oldlist)
+ local a,n,i,j,c,newlist,list,poly,ahh,akk;
+ n:=Length(oldlist);
+ list:=List([1..n],v->[v]);
+ poly:=List([1..n],v->[]);
+ for ahh in taplist do
+ if ahh=1 then
+ for i in [1..n] do
+ Append(poly[i],list[i]);
+ od;
+ fi;
+ newlist:=[];
+ for i in [1..n] do
+ newlist[i]:=[];
+ for a in oldlist[i] do
+ Append(newlist[i],list[a]);
+ od;
+ od;
+ list:=newlist;
+ od;
+ for i in [1..n] do
+ Append(poly[i],list[i]);
+ od;
+ c:=0;
+ for i in [1..n] do
+ Sort(poly[i]);
+ akk:=Length(poly[i])-1;
+ for j in [1..akk] do
+ if poly[i][j]=poly[i][j+1] then c:=c+1; fi;
+ od;
+ if Length(poly[i])<n then c:=c+n-Length(poly[i]); fi;
+ od;
+ return c;
+ end;
+
+
+
+
