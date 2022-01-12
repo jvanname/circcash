@@ -1,7 +1,7 @@
 # We factor the matrix with all 1's into a product of several 0-1 matrices.
 
 sortscorefactorize:=function(array)
-local n,i,j,c,newlist,list,mak;
+local n,i,j,c,newlist,list,mak,k;
 n:=Length(array[1]);
 list:=StructuralCopy(array[1]);
 for k in [2..Length(array)] do
