@@ -1,0 +1,81 @@
+n:=17439;
+
+pairs:=[];
+
+for i in [1..n] do
+pairs[i]:=[i,i];
+od;
+
+for i in [1..n*20] do
+a:=Random([1..n]);b:=Random([1..n]);r:=pairs[a][1];s:=pairs[b][1];pairs[a][1]:=s;pairs[b][1]:=r;
+a:=Random([1..n]);b:=Random([1..n]);r:=pairs[a][2];s:=pairs[b][2];pairs[a][2]:=s;pairs[b][2]:=r;
+od;
+
+
+transitivitytest:=function(lim,pairs)
+local list,c,n,mark,a,i,dd;
+n:=Length(pairs);
+list:=[1..n]*0;
+list[1]:=1;
+a:=1;
+for i in [1..n] do
+a:=pairs[a][Random([1,2])];
+list[a]:=1;
+od;
+mark:=[];
+for i in [1..n] do
+if list[i]=0 then
+Add(mark,i);
+fi;
+od;
+dd:=0;
+while Length(mark)>0 and dd<lim do
+dd:=dd+1;
+a:=Remove(mark);
+if list[pairs[a][Random([1,2])]]=1 then list[a]:=1;
+else Add(mark,a); 
+
+hm:=Random([1..Length(mark)]);
+ah:=mark[Length(mark)];
+bh:=mark[hm];
+mark[hm]:=ah;
+mark[Length(mark)]:=bh;
+fi;
+od;
+return dd<lim;
+end;
+
+altsymtest:=function(lim,pairs)
+local n,list,dd,i,newlist,a,k;
+
+if not transitivitytest(lim,pairs) then return false; fi;
+
+n:=Length(pairs);
+
+list:=[];
+for i in [1..n] do list[i]:=pairs[i][1]; od;
+dd:=0;
+while dd<lim do
+dd:=dd+n;
+a:=list[1];
+k:=1;
+while a>1 do 
+a:=list[a];
+k:=k+1;
+od;
+if k>n/2 and k<=n-3 then
+if IsPrime(k) then return true; fi;
+fi;
+newlist:=[];
+qq:=Random([1,2]);
+for i in [1..n] do
+newlist[i]:=pairs[list[i]][qq];
+od;
+list:=newlist;
+
+od;
+return false;
+end;
+
+
+
