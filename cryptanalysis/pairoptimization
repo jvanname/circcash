@@ -32,6 +32,34 @@ od;
 return Sum(List(list,AbsInt)); 
 end;
 
+norm:=function(x)
+if IsInt(x) then return AbsInt(x); else return
+Sum(List(x,norm));
+fi;
+end;
+
+# I have not tested tensorspectralscore. Remove this message after testing.
+
+tensorspectralscore:=function(nar,matrixlist,testvalues,pairs)
+local list,n,kk,newlist,i,j,m;
+
+list:=StructuralCopy(testvalues);
+n:=Length(list);
+m:=Length(pairs[1]);
+for kk in [1..nar] do
+newlist:=[];
+for i in [1..n] do
+newlist[i]:=0;
+for j in [1..m] do 
+newlist[i]:=newlist[i]+matrixlist[j]*list[pairs[i][j]];
+od;
+od;
+list:=newlist;
+od;
+return Sum(List(list,AbsInt)); 
+end;
+
+
 pairscore:=function(nar,testvalues,arm)
 return spectralscore(nar,testvalues,pairfunctor(arm));
 end;
