@@ -38,7 +38,9 @@ Sum(List(x,norm));
 fi;
 end;
 
-sqfastmatrixproduct:=function(x,y) local z,i,j,k,n; n:=Length(x); z:=[]; for i in [1..n] do z[i]:=[]; for k in [1..n] do z[i][k]:=0; for j in [1..n] do if x[i][j]=1 then z[i][k]:=z[i][k]+y[j][k]; elif x[i][j]=-1 then z[i][k]:=z[i][k]-y[j][k]; elif not x[i][j]=0 then return false; fi; od; od; od; return z; end;
+sqfastmatrixproduct:=function(x,y) local z,i,j,k,n; 
+if IsInt(y) then return x*y; fi;
+n:=Length(x); z:=[]; for i in [1..n] do z[i]:=[]; for k in [1..n] do z[i][k]:=0; for j in [1..n] do if x[i][j]=1 then z[i][k]:=z[i][k]+y[j][k]; elif x[i][j]=-1 then z[i][k]:=z[i][k]-y[j][k]; elif not x[i][j]=0 then return false; fi; od; od; od; return z; end;
 
 
 tensorspectralscore:=function(nar,matrixlist,testvalues,pairs)
