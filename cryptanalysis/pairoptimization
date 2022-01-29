@@ -55,7 +55,7 @@ for i in [1..n] do
 newlist[i]:=0;
 for j in [1..m] do 
 #newlist[i]:=newlist[i]+matrixlist[j]*list[pairs[i][j]];
-#newlist[i]:=newlist[i]+sqfastmatrixproduct(matrixlist[j],list[pairs[i][j]]);
+newlist[i]:=newlist[i]+sqfastmatrixproduct(matrixlist[j],list[pairs[i][j]]);
 od;
 od;
 list:=newlist;
