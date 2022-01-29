@@ -60,7 +60,7 @@ od;
 od;
 list:=newlist;
 od;
-return norm(list);; 
+return norm(list);
 end;
 
 
