@@ -64,7 +64,7 @@ return norm(list);
 end;
 
 
-ntss:=function(normalizer,nar,matrixlist,testvalues,pairs)
+normquotient:=function(normalizer,nar,matrixlist)
 z:=StructuralCopy(normalizer);
 for k in [1..nar] do
 newz:=matrixlist[1]*z*TransposedMat(matrixlist[1]);
