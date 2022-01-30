@@ -65,7 +65,7 @@ end;
 
 
 ntss:=function(normalizer,nar,matrixlist,testvalues,pairs)
-z:=StructuralCopy(normalizer)
+z:=StructuralCopy(normalizer);
 for k in [1..nar] do
 newz:=matrixlist[1]*z*TransposedMat(matrixlist[1]);
 for ll in [1..Length(matrixlist)] do
