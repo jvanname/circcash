@@ -76,7 +76,9 @@ od;
 return norm(z);
 end;
 
-
+ntss:=function(normalizer,nar,matrixlist,testvalues,pairs)
+return Log(1.+tensorspectralscore(nar,matrixlist,testvalues,pairs))/Log(1.+normquotient(normalizer,nar,matrixlist));
+end;
 
 pairscore:=function(nar,testvalues,arm)
 return spectralscore(nar,testvalues,pairfunctor(arm));
