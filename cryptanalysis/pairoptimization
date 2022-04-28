@@ -68,7 +68,7 @@ normquotient:=function(normalizer,nar,matrixlist)
 z:=StructuralCopy(normalizer);
 for k in [1..nar] do
 newz:=matrixlist[1]*z*TransposedMat(matrixlist[1]);
-for ll in [1..Length(matrixlist)] do
+for ll in [2..Length(matrixlist)] do
 newz:=newz+matrixlist[ll]*z*TransposedMat(matrixlist[ll]);
 od;
 z:=newz;
