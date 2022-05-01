@@ -48,7 +48,17 @@ n:=Length(x); z:=[]; for i in [1..n] do z[i]:=[]; for k in [1..n] do z[i][k]:=0;
 normquotient:=function(normalizer,nar,matrixlist)
 z:=StructuralCopy(normalizer);
 for k in [1..nar] do
-newz:=matrixlist[1]*z*TransposedMat(matrixlist[1]);superfastmatrixproduct:=function(x,y)
+newz:=matrixlist[1]*z*TransposedMat(matrixlist[1]);
+for ll in [2..Length(matrixlist)] do
+newz:=newz+matrixlist[ll]*z*TransposedMat(matrixlist[ll]);
+od;
+z:=newz;
+od;
+return norm(z);
+end;
+
+
+superfastmatrixproduct:=function(x,y)
 local m,n,z,i,j;
 m:=Length(x);
 n:=Length(y);
@@ -102,13 +112,6 @@ od;
 return norm(list);
 end;
 
-for ll in [2..Length(matrixlist)] do
-newz:=newz+matrixlist[ll]*z*TransposedMat(matrixlist[ll]);
-od;
-z:=newz;
-od;
-return norm(z);
-end;
 
 ntss:=function(normalizer,nar,matrixlist,testvalues,pairs)
 return tensorspectralscore(2*nar,matrixlist,testvalues,pairs)^(1./(2*nar))/normquotient(normalizer,nar,matrixlist)^(1./(2*nar));
