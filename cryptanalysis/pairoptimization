@@ -43,6 +43,27 @@ if IsInt(y) then return x*y; fi;
 n:=Length(x); z:=[]; for i in [1..n] do z[i]:=[]; for k in [1..n] do z[i][k]:=0; for j in [1..n] do if x[i][j]=1 then z[i][k]:=z[i][k]+y[j][k]; elif x[i][j]=-1 then z[i][k]:=z[i][k]-y[j][k]; elif not x[i][j]=0 then return false; fi; od; od; od; return z; end;
 
 
+
+
+normquotient:=function(normalizer,nar,matrixlist)
+z:=StructuralCopy(normalizer);
+for k in [1..nar] do
+newz:=matrixlist[1]*z*TransposedMat(matrixlist[1]);superfastmatrixproduct:=function(x,y)
+local m,n,z,i,j;
+m:=Length(x);
+n:=Length(y);
+z:=[];
+for j in [1..m] do z[j]:=0; od;
+
+for i in [1..m] do
+for j in [1..n] do
+if x[i][j]=1 then z[i]:=z[i]+y[j];
+elif x[i][j]=-1 then z[i]:=z[i]-y[j]; elif x[i][j]=0 then continue; 
+else z[i]:=z[i]+x[i][j]*y[j]; fi;
+od;
+od;
+return z; end;
+
 tensorspectralscore:=function(nar,matrixlist,testvalues,pairs)
 local list,n,kk,newlist,i,j,m;
 
@@ -55,7 +76,7 @@ for i in [1..n] do
 newlist[i]:=0;
 for j in [1..m] do 
 #newlist[i]:=newlist[i]+matrixlist[j]*list[pairs[i][j]];
-newlist[i]:=newlist[i]+sqfastmatrixproduct(matrixlist[j],list[pairs[i][j]]);
+newlist[i]:=newlist[i]+superfastmatrixproduct(matrixlist[j],list[pairs[i][j]]);
 od;
 od;
 list:=newlist;
@@ -63,11 +84,6 @@ od;
 return norm(list);
 end;
 
-
-normquotient:=function(normalizer,nar,matrixlist)
-z:=StructuralCopy(normalizer);
-for k in [1..nar] do
-newz:=matrixlist[1]*z*TransposedMat(matrixlist[1]);
 for ll in [2..Length(matrixlist)] do
 newz:=newz+matrixlist[ll]*z*TransposedMat(matrixlist[ll]);
 od;
