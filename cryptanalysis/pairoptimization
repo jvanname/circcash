@@ -268,9 +268,11 @@ SortBy(parklist,v->Random([1..9^9]));
 while Length(parklist)>0 do newmatrixlist:=StructuralCopy(matrixlist); amm:=Remove(parklist);
 newmatrixlist[amm[1]][amm[2]][amm[3]]:=amm[4];
 q:=ntss(normalizer,nar,newmatrixlist,testlist,pair); if q>=p then p:=q; matrixlist:=newmatrixlist; Display(p); 
+if q>p then
 parklist:=[];
 for a in [1,2] do for b in [1..m] do for c in [1..m] do mak:=Difference([0,1,-1],[matrixlist[a][b][c]]); for can in mak do
 Add(parklist,[a,b,c,can]); od; od; od; od;
 SortBy(parklist,v->Random([1..9^9]));
+fi;
 fi; od;
 
