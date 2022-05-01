@@ -228,17 +228,17 @@ n:=16; gates:=function(list) list[16]:=RemInt(list[12]+list[16],2); list[15]:=Re
 
 
 # The following code estimates the spectral radius.
-n:=10;
-nn:=2^n;
-m:=6;
-testlist:=List([1..nn],u->List([1..m],v->Random([0,1,-1])));
-testlist[1]:=testlist[1]-Sum(testlist);
-matrixlist:=List([1,2],u->List([1..m],v->List([1..m],w->Random([0,1,-1]))));
-normalizer:=RandomMat(m,m,Integers);
-n:=10; gates:=function(list) list[2]:=RemInt(list[2]+list[6]*list[10],2); end;
-pair:=[]; for i in [1..2^n] do pair[i]:=[]; for j in [1,2] do list:=map(n,i); list[1]:=RemInt(list[1]+j-1,2); gates(list); list:=shift(list); pair[i][j]:=invmap(list); od; od;
-nar:=60;
-ntss(normalizer,nar,matrixlist,testlist,pair);
+#n:=10;
+#nn:=2^n;
+#m:=6;
+#testlist:=List([1..nn],u->List([1..m],v->Random([0,1,-1])));
+#testlist[1]:=testlist[1]-Sum(testlist);
+#matrixlist:=List([1,2],u->List([1..m],v->List([1..m],w->Random([0,1,-1]))));
+#normalizer:=RandomMat(m,m,Integers);
+#n:=10; gates:=function(list) list[2]:=RemInt(list[2]+list[6]*list[10],2); end;
+#pair:=[]; for i in [1..2^n] do pair[i]:=[]; for j in [1,2] do list:=map(n,i); list[1]:=RemInt(list[1]+j-1,2); gates(list); list:=shift(list); pair[i][j]:=invmap(list); od; od;
+#nar:=60;
+#ntss(normalizer,nar,matrixlist,testlist,pair);
 
 n:=10;
 nn:=2^n;
@@ -248,9 +248,9 @@ testlist:=List([1..nn],u->List([1..m],v->Random([0,1,-1])));
 
 testlist[1]:=testlist[1]-Sum(testlist);
 
-matrixlist:=List([1,2],u->List([1..m],v->List([1..m],w->Random([0,1,-1]))));
-
 normalizer:=RandomMat(m,m,Integers);
+
+matrixlist:=List([1,2],u->List([1..m],v->[1..m]*0)); while normquotient(normalizer,nar,matrixlist)=0 do matrixlist[Random([1,2])][Random([1..m])][Random([1..m])]:=Random([-1,1]); od;
 
 n:=10; gates:=function(list) list[2]:=RemInt(list[2]+list[3]*list[4],2); end;
 
@@ -258,8 +258,19 @@ pair:=[]; for i in [1..2^n] do pair[i]:=[]; for j in [1,2] do list:=map(n,i); li
 
 nar:=60;
 
-p:=ntss(normalizer,nar,matrixlist,testlist,pair); while true do newmatrixlist:=StructuralCopy(matrixlist); a:=Random([1,2]); b:=Random([1..6]); c:=Random([1..6]); newmatrixlist[a][b][c]:=Random(Difference([0,1,-1],[matrixlist[a][b][c]])); q:=ntss(normalizer,nar,newmatrixlist,testlist,pair); if q>=p then p:=q; matrixlist:=newmatrixlist; Display(p); fi; od;
+p:=ntss(normalizer,nar,matrixlist,testlist,pair); 
 
+parklist:=[];
+for a in [1,2] do for b in [1..m] do for c in [1..m] do mak:=Difference([0,1,-1],[matrixlist[a][b][c]]); for can in mak do
+Add(parklist,[a,b,c,can]); od; od; od; od;
+SortBy(parklist,v->Random([1..9^9]));
 
-
+while Length(parklist)>0 do newmatrixlist:=StructuralCopy(matrixlist); amm:=Remove(parklist);
+newmatrixlist[amm[1]][amm[2]][amm[3]]:=amm[4];
+q:=ntss(normalizer,nar,newmatrixlist,testlist,pair); if q>=p then p:=q; matrixlist:=newmatrixlist; Display(p); 
+parklist:=[];
+for a in [1,2] do for b in [1..m] do for c in [1..m] do mak:=Difference([0,1,-1],[matrixlist[a][b][c]]); for can in mak do
+Add(parklist,[a,b,c,can]); od; od; od; od;
+SortBy(parklist,v->Random([1..9^9]));
+fi; od;
 
