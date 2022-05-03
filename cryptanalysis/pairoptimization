@@ -114,7 +114,12 @@ end;
 
 
 ntss:=function(normalizer,nar,matrixlist,testvalues,pairs)
-return tensorspectralscore(2*nar,matrixlist,testvalues,pairs)^(1./(2*nar))/normquotient(normalizer,nar,matrixlist)^(1./(2*nar));
+local aa,bb;
+aa:=tensorspectralscore(2*nar,matrixlist,testvalues,pairs);
+bb:=normquotient(normalizer,nar,matrixlist);
+if bb=0 then return 0; fi;
+return Int(aa/bb)^(1./2*nar);
+#return tensorspectralscore(2*nar,matrixlist,testvalues,pairs)^(1./(2*nar))/normquotient(normalizer,nar,matrixlist)^(1./(2*nar));
 end;
 
 pairscore:=function(nar,testvalues,arm)
