@@ -268,7 +268,7 @@ gates:=function(list) list[2]:=RemInt(list[2],2); end;
 gates:=function(list) list[2]:=RemInt(list[2]+list[3]*list[4],2); end;
 
 # NOW DO AN AFFINE TRANSFORMATION.
-gates:=function(list) list[2]:=RemInt(1+list[2]+list[3]+list[4]+list[7],2); end;
+gates:=function(list) list[1]:=RemInt(list[1]+list[3]+list[6]+list[10],2); end;
 
 # NOW DO A REASONABLE BLOCK CIPHER ROUND FUNCTION WITH LINEARITY AND NON-LINEARITY.
 gates:=function(list) list[2]:=RemInt(list[2]+list[3]*list[4]+list[5]*list[6]+list[9],2); end;
