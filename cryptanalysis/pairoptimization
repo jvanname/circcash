@@ -312,13 +312,10 @@ fi; od;
 testlist:=List([1..nn],u->List([1..m],v->Random([0,1,-1])));
 testlist[1]:=testlist[1]-Sum(testlist);
 normalizer:=RandomMat(m,m,Integers);
-matrixlist:=List([1,2],u->List([1..m],v->[1..m]*0));
-nar:=60;
-
 nar:=Int(50000/(1+Log(1+Int(p),2)));
 
 Display([[[nar]]]);
-p:=prentss(normalizer,nar,newmatrixlist,testlist,pair);
+p:=prentss(normalizer,nar,matrixlist,testlist,pair);
 outputtable[kk][llz]:=p^(1./(2*nar));
 od;
 od;
