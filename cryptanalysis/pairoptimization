@@ -290,7 +290,10 @@ pair:=ListPerm([Random(SymmetricGroup(2^n)),Random(SymmetricGroup(2^n))]);
 Append(pairtable,pair);
 Append(typelegend,"totalrandom");
 
-
+outputtable:=[];
+for kk in [1..5] do
+outputtable[kk]:=[];
+for llz in [1..5] do
 nar:=60;
 
 p:=prentss(normalizer,nar,matrixlist,testlist,pair); 
@@ -312,4 +315,7 @@ fi;
 p:=q; matrixlist:=newmatrixlist; Display(p^(1./(2*nar)));
 fi; od;
 
+outputtable[kk][llz]:=p^(1./(2*nar));
 od;
+od;
+
