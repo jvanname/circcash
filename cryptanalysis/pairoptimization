@@ -253,16 +253,6 @@ n:=10;
 nn:=2^n;
 m:=16;
 
-testlist:=List([1..nn],u->List([1..m],v->Random([0,1,-1])));
-
-testlist[1]:=testlist[1]-Sum(testlist);
-
-normalizer:=RandomMat(m,m,Integers);
-
-matrixlist:=List([1,2],u->List([1..m],v->[1..m]*0));
-
-n:=10; 
-
 pairtable:=[];
 typelegend:=[];
 for kk in [1..4] do
@@ -294,6 +284,10 @@ for kk in [1..5] do
 outputtable[kk]:=[];
 pair:=StructuralCopy(pairtable[kk]);
 for llz in [1..5] do
+testlist:=List([1..nn],u->List([1..m],v->Random([0,1,-1])));
+testlist[1]:=testlist[1]-Sum(testlist);
+normalizer:=RandomMat(m,m,Integers);
+matrixlist:=List([1,2],u->List([1..m],v->[1..m]*0));
 nar:=60;
 
 p:=prentss(normalizer,nar,matrixlist,testlist,pair); 
