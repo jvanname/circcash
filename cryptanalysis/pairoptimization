@@ -292,7 +292,7 @@ Add(typelegend,"totalrandom");
 outputtable:=[];
 for kk in [1..5] do
 outputtable[kk]:=[];
-pair:=pairtable[kk];
+pair:=StructuralCopy(pairtable[kk]);
 for llz in [1..5] do
 nar:=60;
 
