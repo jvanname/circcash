@@ -285,7 +285,7 @@ pair:=[]; for i in [1..2^n] do pair[i]:=[]; for j in [1,2] do list:=map(n,i); li
 Add(pairtable,pair);
 od;
 
-pair:=TransposedMat(ListPerm(Random(SymmetricGroup(2^n))),ListPerm(Random(SymmetricGroup(2^n))));
+pair:=TransposedMat([ListPerm(Random(SymmetricGroup(2^n))),ListPerm(Random(SymmetricGroup(2^n)))]);
 Add(pairtable,pair);
 Add(typelegend,"totalrandom");
 
