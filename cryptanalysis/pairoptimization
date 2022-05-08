@@ -316,7 +316,7 @@ nar:=Int(50000/(1+Log(1+Int(p),2)));
 
 Display([[[nar]]]);
 p:=prentss(normalizer,nar,matrixlist,testlist,pair);
-outputtable[kk][llz]:=p^(1./(2*nar));
+outputtable[kk][llz]:=Int(p)^(1./(2*nar));
 od;
 od;
 
