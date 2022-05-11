@@ -38,8 +38,8 @@ for i in 2:n zz=kron(zz,[-1 1; 1 1]) end;
 return zz;
 end;
 
-xx0=makehadamard(n)*x0*makehadamard(n);
-xx1=makehadamard(n)*x1*makehadamard(n);
+xx0=makehadamard(n)*x0*makehadamard(n)/2^n;
+xx1=makehadamard(n)*x1*makehadamard(n)/2^n;
 yy0=zeros(2^n-1,2^n-1);
 yy1=zeros(2^n-1,2^n-1);
 for i in 1:2^n-1
