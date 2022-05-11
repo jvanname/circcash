@@ -1,8 +1,12 @@
+using LinearAlgebra
+
 function map(n,x) list=Vector{Int64}(undef,n); for i in reverse(1:n) if x>2^(i-1) x=x-2^(i-1); list[i]=1; else list[i]=0; end; end; return list; end;
 
+function invmap(list) if length(list)==0 return 1; end;
+nn=length(list)-1
+mars=[]
+for i in 0:nn
+push!(mars,2^i)
+end;
+return 1+dot(list,mars); end;
 
-
-map:=function(n,x) local i,list; list:=[]; for i in Reversed([1..n]) do if x>2^(i-1) then x:=x-2^(i-1); list[i]:=1; else list[i]:=0; fi; od; return list; end;
-
-invmap:=function(list) if Length(list)=0 then return 1; fi;
-return 1+list*List([0..Length(list)-1],v->2^v); end;
