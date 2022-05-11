@@ -3,6 +3,8 @@
 using LinearAlgebra
 using Random
 
+rng=MersenneTwister(1234);
+
 function map(n,x) list=Vector{Int64}(undef,n); for i in reverse(1:n) if x>2^(i-1) x=x-2^(i-1); list[i]=1; else list[i]=0; end; end; return list; end;
 
 function invmap(list) if length(list)==0 return 1; end;
@@ -53,10 +55,22 @@ end;
 
 function rad(x) return maximum(abs.(eigvals(x))); end;
 
-d=5;
+d=4;
+
+function randmake()
+a0=randn(rng, ComplexF32, (d, d));
+a1=randn(rng, ComplexF32, (d, d));
+return rad(kron(yy0,a0)+kron(yy1,a1))/rad(kron(a0,transpose(adjoint(a0)))+kron(a1,transpose(adjoint(a1))))^(1/2)
+end;
 
 a0=randn(rng, ComplexF32, (d, d));
 a1=randn(rng, ComplexF32, (d, d));
+p=0;
 
-rad(kron(yy0,a0)+kron(yy1,a1))/rad(kron(a0,transpose(adjoint(a0)))+kron(a1,transpose(adjoint(a1))))^(1/2)
+while true
+aa0=a0+randn(rng, ComplexF32, (d, d));
+aa1=a1+randn(rng, ComplexF32, (d, d));
+q=rad(kron(yy0,aa0)+kron(yy1,aa1))/rad(kron(aa0,transpose(adjoint(aa0)))+kron(aa1,transpose(adjoint(aa1))))^(1/2);
+if q>=p p=q; display(p); a0=aa0; a1=aa1; end;
+end;
 
