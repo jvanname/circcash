@@ -1,3 +1,5 @@
+# We are looking at eigenvalues and eigenvectors and spectral radii of matrices arising from block ciphers.
+
 using LinearAlgebra
 
 function map(n,x) list=Vector{Int64}(undef,n); for i in reverse(1:n) if x>2^(i-1) x=x-2^(i-1); list[i]=1; else list[i]=0; end; end; return list; end;
@@ -18,3 +20,6 @@ if n==0 return newlist; end;
 for i in 2:n push!(newlist,list[i-1]) end;
 return newlist;
 end;
+
+function gates(list) list[1]=(list[1]+list[3]+list[7])%2; end;
+
