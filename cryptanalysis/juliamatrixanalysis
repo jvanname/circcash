@@ -21,5 +21,35 @@ for i in 2:n push!(newlist,list[i-1]) end;
 return newlist;
 end;
 
-function gates(list) list[1]=(list[1]+list[3]+list[7])%2; end;
+function gates(bit,list) list[1]=(bit+list[1]+list[2])%2; end;
+
+n=4;
+x0=zeros(2^n,2^n);
+x1=zeros(2^n,2^n);
+expn=2^n;
+for i in 1:expn 
+list=map(n,i); gates(0,list); x0[i,invmap(list)]=1;
+list=map(n,i); gates(1,list); x1[i,invmap(list)]=1;
+end;
+
+function makehadamard(n)
+zz=[-1 1; 1 1];
+for i in 2:n zz=kron(zz,[-1 1; 1 1]) end;
+return zz;
+end;
+
+xx0=makehadamard(n)*x0*makehadamard(n);
+xx1=makehadamard(n)*x1*makehadamard(n);
+yy0=zeros(2^n-1,2^n-1);
+yy1=zeros(2^n-1,2^n-1);
+for i in 1:2^n-1
+for j in 1:2^n-1
+yy0[i,j]=xx0[i,j];
+yy1[i,j]=xx1[i,j];
+end;
+end;
+
+
+
+
 
