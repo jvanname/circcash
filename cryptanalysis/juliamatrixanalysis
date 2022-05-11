@@ -10,3 +10,11 @@ push!(mars,2^i)
 end;
 return 1+dot(list,mars); end;
 
+function shift(list)
+n=length(list);
+newlist=[];
+push!(newlist,list[n]);
+if n==0 return newlist; end;
+for i in 2:n push!(newlist,list[i-1]) end;
+return newlist;
+end;
