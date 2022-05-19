@@ -79,3 +79,8 @@ d=12; q=12; a0=randn(d,d); a1=randn(d,d); a0=a0/norm(a0); a1=a1/norm(a1); b0=ran
 function rad(n,x) return norm(x^n)^(1/n); end;
 
 d=30; q=10; a0=randn(d,d); a1=randn(d,d); a0=a0/norm(a0); a1=a1/norm(a1); b0=randn(q,q); b1=randn(q,q); n=30; hhm=rad(n,kron(a0,a0)+kron(a1,a1))^(1/2); while true f(x,y)=rad(n,kron(x,a0)+kron(y,a1))/rad(n,kron(x,x)+kron(y,y))^(1/2); old=gradient(f,b0,b1); arm=[]; for k in 1:2 push!(arm,old[k]/f(b0,b1)); end; b0=b0+arm[1]/3; b1=b1+arm[2]/3; display(f(b0,b1)/hhm); b0=2*b0/(norm(b0)+norm(b1)); b1=2*b1/(norm(b0)+norm(b1)); end;
+
+
+
+
+d=5; n=30; k=10; aa=[]; bb=[]; for i in 1:k push!(aa,randn(n,n)); push!(bb,randn(d,d)); end; function f(mm,x,y) h=size(x[1])[1]*size(y[1])[1]; kk=length(x); amm=zeros(h,h); for i in 1:kk amm=amm+kron(x[i],y[i]); end; return rad(mm,amm); end; m=30; function g(y) return f(m,aa,y)/f(m,y,y)^(1/2); end; aat=[]; while true grad=gradient(g,bb)[1]; bb=(bb+10*grad); bb=0.99*bb+0.01*bb/norm(bb); display(g(bb)); push!(aat,norm(bb[1])/norm(bb[2])); end;
