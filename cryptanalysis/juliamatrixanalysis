@@ -84,3 +84,11 @@ d=30; q=10; a0=randn(d,d); a1=randn(d,d); a0=a0/norm(a0); a1=a1/norm(a1); b0=ran
 
 
 d=5; n=30; k=10; aa=[]; bb=[]; for i in 1:k push!(aa,randn(n,n)); push!(bb,randn(d,d)); end; function f(mm,x,y) h=size(x[1])[1]*size(y[1])[1]; kk=length(x); amm=zeros(h,h); for i in 1:kk amm=amm+kron(x[i],y[i]); end; return rad(mm,amm); end; m=30; function g(y) return f(m,aa,y)/f(m,y,y)^(1/2); end; aat=[]; while true grad=gradient(g,bb)[1]; bb=(bb+10*grad); bb=0.99*bb+0.01*bb/norm(bb); display(g(bb)); push!(aat,norm(bb[1])/norm(bb[2])); end;
+
+
+x=[]; for i in 1:7 push!(x,randn(5,5)); end;
+
+function f(x) n=length(x); r=size(x[1])[1]; am=zeros(r,r)^0; bm=zeros(r*r,r*r); for i in 1:n am=am*x[i]; bm=bm+kron(x[i],x[i]); end; return rad(am)^(2/n)/rad(bm); end;
+
+while true x=x+gradient(f,x)[1]/1000; x=0.99*x+0.01*x/norm(x); display(f(x)); end;
+
