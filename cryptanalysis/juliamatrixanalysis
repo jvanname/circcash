@@ -101,9 +101,9 @@ m=10;
 
 matrixlist=[]; for i in 1:d push!(matrixlist,randn(m,m)); end;
 
-u=randn(n);
-v=randn(n);
 
+
+function f(matrixlist)
 
 
 
