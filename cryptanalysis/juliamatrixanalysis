@@ -154,7 +154,7 @@ for i in 1:r
 am=am+kron(matrixlist[i],matrixlist[i]);
 end;
 
-return abs(dot(u,w))^(1/rounds)/rad(am);
+return abs(dot(u,w));
 end;
 
 
