@@ -107,7 +107,7 @@ for i in 1:n push!(u,randn(m,m)); push!(v,randn(m,m)); end;
 
 #I DO NOT KNOW IF I CAN MAKE THIS CODE DIFFERENTIABLE.
 
-function f(rounds,u,v,matrixlist)
+function quickspecrad(rounds,u,v,matrixlist)
 w=v;
 r=length(matrixlist);
 for i in 1:rounds
@@ -129,6 +129,33 @@ end;
 return abs(dot(u,w))^(1/rounds)/rad(am);
 end;
 
+pointmatrix=function(m,n,i,j) x=zeros(m,n); x[i,j]=1; return x; end;
+
+function quickspecradgrad(rounds,u,v,ipoint,kpoint,coordzero,coordone,matrixlist)
+w=v;
+r=length(matrixlist);
+nn=size(matrixlist[1])[1];
+submatrix=pointmatrix(nn,nn,coordzero,coordone);
+
+for i in 1:rounds
+oldw=w;
+w=oldw*0;
+for j in 1:n
+for k in 1:r
+if (i==ipoint and k==kpoint) w[j]=w[j]+submatrix*oldw[pair[j][k]];
+elseif !(i==ipoint) w[j]=w[j]+matrixlist[k]*oldw[pair[j][k]]; end;
+end;
+end;
+end;
+prr=size(matrixlist[1])[1];
+
+am=zeros(prr*prr,prr*prr);
+for i in 1:r
+am=am+kron(matrixlist[i],matrixlist[i]);
+end;
+
+return abs(dot(u,w))^(1/rounds)/rad(am);
+end;
 
 
 
