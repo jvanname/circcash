@@ -143,10 +143,20 @@ w=oldw*0;
 for j in 1:n
 for k in 1:r
 if (i==ipoint && k==kpoint) w[j]=w[j]+submatrix*oldw[pair[j][k]];
-elseif !(i==ipoint) w[j]=w[j]+matrixlist[k]*oldw[pair[j][k]];
+elseif !(i==ipoint) w[j]=w[j]+matrixlist[k]*oldw[pair[j][k]]; end;
 end;
 end;
+# Here we need to add code to normalize the computation.
+akf=norm(w[1]);
+if (akf>10^9 or akf<10^(-9))
+submean=mean(w);
+for jj in 1:n
+w[jj]=w[jj]-submean;
+#w[jj]=w[jj]/akf;
+#Watch out. We need to keep track of this factor.
 end;
+end
+#end normalization
 end;
 prr=size(matrixlist[1])[1];
 
