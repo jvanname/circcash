@@ -149,7 +149,7 @@ end;
 end;
 # Here we need to add code to normalize the computation.
 akf=norm(w[1]);
-if (akf>10^9 or akf<10^(-9))
+if (akf>10^9 || akf<10^(-9) || i%25==0)
 submean=mean(w);
 for jj in 1:n
 w[jj]=w[jj]-submean;
