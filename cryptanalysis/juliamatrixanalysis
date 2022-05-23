@@ -131,7 +131,7 @@ end;
 
 pointmatrix=function(m,n,i,j) x=zeros(m,n); x[i,j]=1; return x; end;
 
-function quickspecradgrad(rounds,u,v,ipoint,kpoint,coordzero,coordone,matrixlist)
+function logquickspecradgrad(rounds,u,v,ipoint,kpoint,coordzero,coordone,matrixlist)
 logtracker=0.;
 w=v;
 r=length(matrixlist);
