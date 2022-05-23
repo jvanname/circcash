@@ -167,7 +167,7 @@ for i in 1:r
 am=am+kron(matrixlist[i],matrixlist[i]);
 end;
 
-return abs(dot(u,w));
+return logtracker+log(abs(dot(u,w)));
 end;
 
 # We may want to use periodic normalization to make sure that the values do not increase to quickly.
