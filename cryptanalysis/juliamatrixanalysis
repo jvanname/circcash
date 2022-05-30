@@ -83,8 +83,7 @@ d=30; q=10; a0=randn(d,d); a1=randn(d,d); a0=a0/norm(a0); a1=a1/norm(a1); b0=ran
 
 
 
-d=5; n=30; k=10; aa=[]; bb=[]; for i in 1:k push!(aa,randn(n,n)); push!(bb,randn(d,d)); end; function f(mm,x,y) h=size(x[1])[1]*size(y[1])[1]; kk=length(x); amm=zeros(h,h); for i in 1:kk amm=amm+kron(x[i],y[i]); end; return rad(mm,amm); end; m=30; function g(y) return f(m,aa,y)/f(m,y,y)^(1/2); end; aat=[]; while true grad=gradient(g,bb)[1]; bb=(bb+10*grad); bb=0.99*bb+0.01*bb/norm(bb); display(g(bb)); push!(aat,norm(bb[1])/norm(bb[2])); end;
-
+d=5; n=30; k=10; aa=[]; bb=[]; for i in 1:k push!(aa,randn(n,n)); push!(bb,randn(d,d)); end; function f(mm,x,y) h=size(x[1])[1]*size(y[1])[1]; kk=length(x); amm=zeros(h,h); for i in 1:kk amm=amm+kron(x[i],adjoint(transpose(y[i]))); end; return rad(mm,amm); end; m=30; function g(y) return f(m,aa,y)/f(m,y,y)^(1/2); end; aat=[]; rate=1; oldcat=0; while true grad=gradient(g,bb)[1]; bb=(bb+rate*grad); cat=g(bb); bb=0.99*bb+0.01*bb/norm(bb); display([cat,rate]); rate=rate*1.01; if oldcat>cat rate=rate*0.5; end; oldcat=cat; push!(aat,norm(bb[1])/norm(bb[2])); end;
 
 x=[]; for i in 1:7 push!(x,randn(5,5)); end;
 
