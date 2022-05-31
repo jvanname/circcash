@@ -172,3 +172,37 @@ end;
 # We may want to use periodic normalization to make sure that the values do not increase to quickly.
 
 
+d=4; n=10; k=2; aa=[]; bb=[]; for i in 1:k push!(aa,randn(ComplexF64,n,n)); push!(bb,randn(ComplexF64,d,d)); end; 
+
+topeigenvector=randn(ComplexF64,d*n);
+bottomeigenvector=randn(ComplexF64,d,d)^0;
+
+function f(x)
+k=length(x);
+testbottomeigenvector=bottomeigenvector*0;
+for i in 1:k
+testbottomeigenvector=testbottomeigenvector+x[i]*bottomeigenvector*adjoint(x[i]);
+end;
+return norm(sum(kron.(x,adjoint.(transpose.(aa))))*topeigenvector)/norm(testbottomeigenvector);
+end;
+
+rate=1;
+oldcat=0;
+while true
+newtopeigenvector=topeigenvector*0;
+newbottomeigenvector=bottomeigenvector*0;
+for i in 1:k 
+newbottomeigenvector=newbottomeigenvector+bb[i]*bottomeigenvector*adjoint(bb[i]);
+newtopeigenvector=newtopeigenvector+kron(bb[i],adjoint(transpose(aa[i])))*topeigenvector;
+end;
+newbottomeigenvector=newbottomeigenvector/norm(newbottomeigenvector);
+newtopeigenvector=newtopeigenvector/norm(newtopeigenvector);
+
+grad=gradient(f,bb)[1];
+bb=(bb+rate*grad); cat=f(bb); bb=0.99*bb+0.01*bb/sum(norm.(bb)); display([cat,rate]); rate=rate*1.01; if oldcat<cat rate=rate*0.99; end; 
+oldcat=cat;
+end;
+
+
+
+
