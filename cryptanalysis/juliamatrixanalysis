@@ -210,3 +210,68 @@ end;
 
 
 
+
+
+
+d=20; n=100; k=10; aa=[];  
+
+for i in 1:k 
+xx=randn(ComplexF64,n,n);
+push!(aa,xx); end;
+
+bb=[]; for i in 1:k push!(bb,randn(ComplexF64,d,d)); end; 
+
+topeigenvector=randn(ComplexF64,n,d);
+bottomeigenvector=randn(ComplexF64,d,d)^0;
+
+rate=1;
+
+function f(x)
+testtopeigenvector=topeigenvector*0;
+testbottomeigenvector=bottomeigenvector*0;
+
+testtopeigenvector=topeigenvector*0;
+testbottomeigenvector=bottomeigenvector*0;
+for i in 1:k
+testtopeigenvector=testtopeigenvector+aa[i]*topeigenvector*adjoint(x[i]);
+testbottomeigenvector=testbottomeigenvector+x[i]*bottomeigenvector*adjoint(x[i]);
+end;
+return real(tr(testtopeigenvector*adjoint(topeigenvector)))/norm(testbottomeigenvector)^(1/2);
+end;
+
+while true 
+if rate>1 
+rate=0.01;
+end;
+newtopeigenvector=topeigenvector*0;
+newbottomeigenvector=bottomeigenvector*0;
+
+for i in 1:k
+newtopeigenvector=newtopeigenvector+aa[i]*topeigenvector*adjoint(bb[i]);
+newbottomeigenvector=newbottomeigenvector+bb[i]*bottomeigenvector*adjoint(bb[i]);
+end;
+topeigenvector=newtopeigenvector/norm(newtopeigenvector);
+bottomeigenvector=newbottomeigenvector/norm(newbottomeigenvector);
+
+for i in 1:5
+grad=gradient(f,bb)[1];
+bb=bb+rate*grad;
+end;
+
+grad=gradient(f,bb)[1];
+old=f(bb);
+bb=bb+rate*grad;
+new=f(bb);
+display([new,rate]);
+rate=rate*1.01;
+if old>new
+rate=rate*0.50;
+end;
+bb=0.99*bb+0.01*bb/mean(norm.(bb));
+end;
+
+
+
+
+
+
