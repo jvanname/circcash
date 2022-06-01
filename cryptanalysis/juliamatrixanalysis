@@ -314,7 +314,7 @@ for i in 1:2^n
 neweigenvector[i]=matrixzero*eigenvector[pairzero[i]]+matrixone*eigenvector[pairone[i]];
 end;
     
-eigenvector=neweigenvector/mean(abs2.(norm.(neweigenvector)));
+eigenvector=neweigenvector/mean(abs2.(norm.(neweigenvector)))^(1/2);
 
 axe=mean(eigenvector); for i in 1:2^n
 eigenvector[i]=eigenvector[i]-axe; end;
