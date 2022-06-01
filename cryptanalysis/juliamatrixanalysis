@@ -275,3 +275,68 @@ end;
 
 
 
+
+n=6; d=4;
+
+
+function gates(bit,list) list[1]=(bit+list[1]+list[2]*list[3]+list[4]+list[6])%2; end;
+    
+    matrixzero=randn(ComplexF64,d,d); matrixone=randn(ComplexF64,d,d);
+    
+    pairzero=[]; pairone=[];
+    
+    for i in 1:2^n list=map(n,i); gates(0,list);
+    push!(pairzero,invmap(shift(list)));
+    
+    list=map(n,i); gates(1,list); push!(pairone,invmap(shift(list)));
+    end;
+    
+    eigenvector=[];
+    
+    for i in 1:2^n push!(eigenvector,randn(ComplexF64,d)); end;
+    axe=mean(eigenvector); for i in 1:2^n
+    eigenvector[i]=eigenvector[i]-axe; end;
+    
+function f(x,y) 
+testsum=0;
+nn=2^n; 
+for i in 1:nn
+testsum=testsum+norm(x*eigenvector[pairzero[i]]+y*eigenvector[pairone[i]])^2;
+end;
+return (testsum/2^n)^(1/2)/rad(kron(x,adjoint(transpose(x)))+kron(x,adjoint(transpose(y))))^(1/2);
+end;
+    
+rate=1;
+
+while true  if rate>1  rate=0.01; end; neweigenvector=eigenvector*0;
+
+for i in 1:2^n
+neweigenvector[i]=matrixzero*eigenvector[pairzero[i]]+matrixone*eigenvector[pairone[i]];
+end;
+    
+eigenvector=neweigenvector/mean(abs2.(norm.(neweigenvector)));
+
+axe=mean(eigenvector); for i in 1:2^n
+eigenvector[i]=eigenvector[i]-axe; end;
+    
+    
+grad=gradient(f,matrixzero,matrixone);
+matrixzero=matrixzero+rate*grad[1];
+matrixone=matrixone+rate*grad[2];
+    
+oldcat=f(matrixzero,matrixone);
+grad=gradient(f,matrixzero,matrixone);
+matrixzero=matrixzero+rate*grad[1];
+matrixone=matrixone+rate*grad[2]; cat=f(matrixzero,matrixone);
+    
+if cat<oldcat rate=rate*0.5; end;
+rate=rate*1.01;
+
+factor=norm(matrixzero)+norm(matrixone);
+matrixzero=matrixzero*(0.99+001/factor);
+matrixone=matrixone*(0.99+0.01/factor); 
+
+display([cat,rate])
+end;
+
+
