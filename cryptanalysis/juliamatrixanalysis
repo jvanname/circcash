@@ -303,7 +303,7 @@ nn=2^n;
 for i in 1:nn
 testsum=testsum+norm(x*eigenvector[pairzero[i]]+y*eigenvector[pairone[i]])^2;
 end;
-return (testsum/2^n)^(1/2)/rad(kron(x,adjoint(transpose(x)))+kron(x,adjoint(transpose(y))))^(1/2);
+return (testsum/2^n)^(1/2)/rad(kron(x,adjoint(transpose(x)))+kron(y,adjoint(transpose(y))))^(1/2);
 end;
     
 rate=1;
