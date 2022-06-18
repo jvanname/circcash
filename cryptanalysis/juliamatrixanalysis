@@ -348,6 +348,26 @@ bb=bb*0.9+bb*0.1/squag;
 display([new,rate]);
 end;
 
+rounds=30;
+logscore=0;
+for iii in 1:rounds
+bottomeigenvector=aa*bottomeigenvector*adjoint(aa)+bb*bottomeigenvector*adjoint(bb);
+amm=norm(bottomeigenvector);
+logscore=logscore-amm/2;
+bottomeigenvector=bottomeigenvector/amm;
+testtopeigenvector=topeigenvector*0;
+for i in 1:n
+testtopeigenvector[i]=aa*topeigenvector[pairzero[i]]+bb*topeigenvector[pairone[i]];
+end;
+amm=norm(testtopeigenvector);
+logscore=logscore+amm;
+topeigenvector=testtopeigenvector/amm;
+every=mean(topeigenvector);
+for i in 1:n
+topeigenvector[i]=topeigenvector[i]-every;
+end;
+end;
+score=exp(logscore/rounds);
 
 
 
