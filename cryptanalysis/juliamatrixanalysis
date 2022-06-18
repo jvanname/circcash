@@ -353,14 +353,14 @@ logscore=0;
 for iii in 1:rounds
 bottomeigenvector=aa*bottomeigenvector*adjoint(aa)+bb*bottomeigenvector*adjoint(bb);
 amm=norm(bottomeigenvector);
-logscore=logscore-amm/2;
+logscore=logscore-log(amm)/2;
 bottomeigenvector=bottomeigenvector/amm;
 testtopeigenvector=topeigenvector*0;
 for i in 1:n
 testtopeigenvector[i]=aa*topeigenvector[pairzero[i]]+bb*topeigenvector[pairone[i]];
 end;
 amm=norm(testtopeigenvector);
-logscore=logscore+amm;
+logscore=logscore+log(amm);
 topeigenvector=testtopeigenvector/amm;
 every=mean(topeigenvector);
 for i in 1:n
