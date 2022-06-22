@@ -209,40 +209,46 @@ end;
 
 
 
-
-
-
-
-d=20; n=100; k=10; aa=[];  
+d=10; n=200; k=10; aa=[];  
 
 for i in 1:k 
 xx=randn(ComplexF64,n,n);
 push!(aa,xx); end;
 
-bb=[]; for i in 1:k push!(bb,randn(ComplexF64,d,d)); end; 
+bb=[]; for i in 1:k xx=zeros(ComplexF64,d,d); for ii in 1:d for jj in 1:d xx[ii,jj]=aa[i][ii,jj]; end; end; push!(bb,xx); bb[i]=randn(ComplexF64,d,d); end; 
+
 
 topeigenvector=randn(ComplexF64,n,d);
 bottomeigenvector=randn(ComplexF64,d,d)^0;
 
 rate=1;
+pp=1;
 
 function f(x)
-testtopeigenvector=topeigenvector*0;
-testbottomeigenvector=bottomeigenvector*0;
 
-testtopeigenvector=topeigenvector*0;
-testbottomeigenvector=bottomeigenvector*0;
+testtopeigenvector=topeigenvector;
+testbottomeigenvector=bottomeigenvector;
+
+for jar in 1:pp
+newtesttopeigenvector=testtopeigenvector*0;
+newtestbottomeigenvector=testbottomeigenvector*0;
 for i in 1:k
-testtopeigenvector=testtopeigenvector+aa[i]*topeigenvector*adjoint(x[i]);
-testbottomeigenvector=testbottomeigenvector+x[i]*bottomeigenvector*adjoint(x[i]);
+newtesttopeigenvector=newtesttopeigenvector+aa[i]*testtopeigenvector*adjoint(x[i]);
+newtestbottomeigenvector=newtestbottomeigenvector+x[i]*testbottomeigenvector*adjoint(x[i]);
 end;
-return real(tr(testtopeigenvector*adjoint(topeigenvector)))/norm(testbottomeigenvector)^(1/2);
+testtopeigenvector=newtesttopeigenvector;
+testbottomeigenvector=newtestbottomeigenvector;
 end;
+
+return norm(testtopeigenvector)^(1/pp)/norm(testbottomeigenvector)^(1/(2*pp));
+end;
+
+tarm=true;
+
+pcat=0;
+oldpcat=0;
 
 while true 
-if rate>1 
-rate=0.01;
-end;
 newtopeigenvector=topeigenvector*0;
 newbottomeigenvector=bottomeigenvector*0;
 
@@ -262,15 +268,24 @@ grad=gradient(f,bb)[1];
 old=f(bb);
 bb=bb+rate*grad;
 new=f(bb);
-display([new,rate]);
+pcat=new;
+display([new,rate,pp]);
+if tarm rate=rate*1.1;
+end;
 rate=rate*1.01;
 if old>new
 rate=rate*0.50;
+tarm=false;
 end;
-bb=0.99*bb+0.01*bb/mean(norm.(bb));
+bb=0.9*bb+0.1*bb/mean(norm.(bb));
+
+if pcat<oldpcat
+pp=pp+1;
+elseif pp>1 && rand(1:2)==1
+pp=pp-1;
 end;
-
-
+oldpcat=pcat;
+end;
 
 
 
