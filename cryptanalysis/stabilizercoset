@@ -1,0 +1,31 @@
+n=24;
+midn=(n-RemInt(n,2))/2;
+
+map:=function(n,x) local i,list; list:=[]; for i in Reversed([1..n]) do if x>2^(i-1) then x:=x-2^(i-1); list[i]:=1; else list[i]:=0; fi; od; return list; end;
+
+invmap:=function(list) if Length(list)=0 then return 1; fi;
+return 1+list*List([0..Length(list)-1],v->2^v); end;
+
+onemodulo:=function(x,y) return RemInt(x-1,y)+1; end;
+
+shift:=function(list) local i,newlist,n; n:=Length(list); newlist:=[]; if n=0 then return newlist; fi; for i in [2..n] do newlist[i]:=list[i-1]; od; newlist[1]:=list[n]; return newlist; end;
+
+invshift:=function(list) local i,newlist,n; n:=Length(list); newlist:=[]; for i in [1..n-1] do newlist[i]:=list[i+1]; od; newlist[n]:=list[1]; return newlist; end;
+
+# Here, we are finding the fixed points of the stabilizer groups and stabilizer cosets.
+
+aa=[];
+bb=[];
+for i in [1..n] do
+aa[i]:=Random([0,1]);
+bb[i]:=Random([0,1]);
+od;
+
+
+for i in [1..2^midn] do
+for j in [1..2^(n-midn)] do
+
+
+od;
+od;
+
