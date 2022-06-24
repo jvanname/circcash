@@ -386,4 +386,127 @@ score=exp(logscore/rounds);
 
 
 
+nn=10;
+n=2^nn;
+d=10;
+k=2; 
 
+function gates(bit,list) list[1]=(bit+list[1]+list[2]*list[3])%2; 
+end;
+
+pairzero=[];
+pairone=[];
+
+for i in 1:n
+list=map(nn,i); gates(0,list); 
+push!(pairzero,invmap(shift(list)));
+list=map(nn,i); gates(1,list); 
+push!(pairone,invmap(shift(list)));
+end;
+
+bottomeigenvector=randn(ComplexF64,d,d);
+bottomeigenvector=bottomeigenvector/norm(bottomeigenvector);
+
+topeigenvector=[];
+for i in 1:n
+push!(topeigenvector,randn(ComplexF64,d));
+end;
+every=mean(topeigenvector);
+for i in 1:n
+topeigenvector[i]=topeigenvector[i]-every;
+end;
+topeigenvector=topeigenvector/norm(topeigenvector);
+
+aa=randn(ComplexF64,d,d);
+bb=randn(ComplexF64,d,d);
+
+pp=10;
+
+function f(aa,bb)
+testbottomeigenvector=deepcopy(bottomeigenvector);
+testtopeigenvector=deepcopy(topeigenvector);
+for jar in 1:pp
+testbottomeigenvector=aa*testbottomeigenvector*adjoint(aa)+bb*testbottomeigenvector*adjoint(bb);
+newtesttopeigenvector=testtopeigenvector*0;
+for i in 1:n
+newtesttopeigenvector[i]=aa*testtopeigenvector[pairzero[i]]+bb*testtopeigenvector[pairone[i]];
+end;
+testtopeigenvector=newtesttopeigenvector;
+end;
+
+return norm(testtopeigenvector)^(1/pp)/norm(testbottomeigenvector)^(1/(2*pp));
+end;
+
+rate=1;
+delta=1;
+gradaa=zeros(ComplexF64,d,d);
+gradbb=zeros(ComplexF64,d,d);
+
+while true 
+
+bottomeigenvector=aa*bottomeigenvector*adjoint(aa)+bb*bottomeigenvector*adjoint(bb);
+bottomeigenvector=bottomeigenvector/norm(bottomeigenvector);
+testtopeigenvector=topeigenvector*0;
+for i in 1:n
+testtopeigenvector[i]=aa*topeigenvector[pairzero[i]]+bb*topeigenvector[pairone[i]];
+end;
+topeigenvector=testtopeigenvector/norm(testtopeigenvector);
+every=mean(topeigenvector);
+for i in 1:n
+topeigenvector[i]=topeigenvector[i]-every;
+end;
+
+newaa=randn(ComplexF64,d,d);
+newbb=randn(ComplexF64,d,d);
+
+der=(f(aa+newaa*delta,bb+newbb*delta)-f(aa,bb))/delta;
+twoder=(f(aa+newaa*2*delta,bb+newbb*2*delta)-f(aa,bb))/(2*delta);
+
+if abs(der/twoder)>1.1 || abs(twoder/der)>1.1
+delta=delta*0.50;
+end;
+delta=delta*1.01;
+
+for ark in 1:10
+newaa=randn(ComplexF64,d,d);
+newbb=randn(ComplexF64,d,d);
+der=(f(aa+newaa*delta,bb+newbb*delta)-f(aa,bb))/delta;
+gradaa=0.9*gradaa+0.1*newaa*der;
+gradbb=0.9*gradbb+0.1*newbb*der;
+end;
+
+old=f(aa,bb);
+aa=aa+rate*gradaa;
+bb=bb+rate*gradbb;
+new=f(aa,bb);
+
+if old>new rate=rate*0.9; end;
+rate=rate*1.001;
+
+squag=norm(aa)+norm(bb);
+
+aa=aa*0.9+aa*0.1/squag;
+bb=bb*0.9+bb*0.1/squag;
+display([new,rate,delta]);
+end;
+
+rounds=30;
+logscore=0;
+for iii in 1:rounds
+bottomeigenvector=aa*bottomeigenvector*adjoint(aa)+bb*bottomeigenvector*adjoint(bb);
+amm=norm(bottomeigenvector);
+logscore=logscore-log(amm)/2;
+bottomeigenvector=bottomeigenvector/amm;
+testtopeigenvector=topeigenvector*0;
+for i in 1:n
+testtopeigenvector[i]=aa*topeigenvector[pairzero[i]]+bb*topeigenvector[pairone[i]];
+end;
+amm=norm(testtopeigenvector);
+logscore=logscore+log(amm);
+topeigenvector=testtopeigenvector/amm;
+every=mean(topeigenvector);
+for i in 1:n
+topeigenvector[i]=topeigenvector[i]-every;
+end;
+end;
+score=exp(logscore/rounds)
