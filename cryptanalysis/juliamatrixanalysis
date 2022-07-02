@@ -386,6 +386,32 @@ score=exp(logscore/rounds);
 
 
 
+
+
+ntop=5;
+nbottom=7;
+d=10;
+nn=ntop+nbottom;
+n=2^nn;
+function gates(bit,listtop,listbottom) 
+listtop[1]=(bit+listtop[1]+listtop[2]*listbottom[3])%2; 
+listbottom[1]=(bit+listbottom[1]+listbottom[2]+listtop[4])%2; 
+end;
+
+pairzero=[]; pairone=[];
+for i in 1:n
+list=map(nn,i); 
+
+listtop=[]; listbottom=[]; for j in 1:ntop push!(listtop,list[j]); end; for j in (ntop+1):nn push!(listbottom,list[j]); end;
+gates(0,listtop,listbottom);
+push!(pairzero,invmap(vcat(shift(listtop),shift(listbottom))));
+listtop=[]; listbottom=[]; for j in 1:ntop push!(listtop,list[j]); end; for j in (ntop+1):nn push!(listbottom,list[j]); end;
+gates(1,listtop,listbottom);
+push!(pairone,invmap(vcat(shift(listtop),shift(listbottom))));
+end;
+
+
+
 nn=10;
 n=2^nn;
 d=10;
