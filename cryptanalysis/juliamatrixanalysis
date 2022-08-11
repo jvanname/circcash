@@ -536,3 +536,34 @@ topeigenvector[i]=topeigenvector[i]-every;
 end;
 end;
 score=exp(logscore/rounds)
+
+
+n1=5;
+n2=7;
+nn=n1+n2;
+nn=10;
+n=2^nn;
+d=20;
+k=2; 
+
+function gates(bit,listzero,listone) 
+listzero[1]=(bit+listzero[1]+listzero[2]*listzero[3]+listone[4])%2; 
+listone[1]=(bit+listone[1]+listone[2]+listzero[4])%2;
+end;
+
+pairzero=[];
+pairone=[];
+
+function numsplitzero(x)
+return onemodulo(x,2^n1); end;
+
+function numsplitone(x)
+return (x-numsplitzero(x))/2^n1+1; end;
+
+
+for i in 1:n
+list=map(nn,i); gates(0,list); 
+push!(pairzero,invmap(shift(list)));
+list=map(nn,i); gates(1,list); 
+push!(pairone,invmap(shift(list)));
+end;
