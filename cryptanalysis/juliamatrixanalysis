@@ -611,7 +611,7 @@ end;
 
 pp=10;
 
-function(matrixnetwork)
+function f(matrixnetwork)
 testbottomeigenvector=deepcopy(bottomeigenvector);
 testtopeigenvector=deepcopy(topeigenvector);
 
