@@ -567,3 +567,131 @@ push!(pairzero,invmap(shift(list)));
 list=map(nn,i); gates(1,list); 
 push!(pairone,invmap(shift(list)));
 end;
+
+
+
+
+nn=10;
+n=2^nn;
+d=10;
+k=2; 
+
+function gates(bit,list) list[1]=(bit+list[1]+list[2]*list[3])%2; 
+end;
+
+pairzero=[];
+pairone=[];
+
+for i in 1:n
+list=map(nn,i); gates(0,list); 
+push!(pairzero,invmap(shift(list)));
+list=map(nn,i); gates(1,list); 
+push!(pairone,invmap(shift(list)));
+end;
+
+pairtable=[pairzero,pairone];
+
+bottomeigenvector=randn(ComplexF64,d,d);
+bottomeigenvector=bottomeigenvector/norm(bottomeigenvector);
+
+topeigenvector=[];
+for i in 1:n
+push!(topeigenvector,randn(ComplexF64,d));
+end;
+every=mean(topeigenvector);
+for i in 1:n
+topeigenvector[i]=topeigenvector[i]-every;
+end;
+topeigenvector=topeigenvector/norm(topeigenvector);
+
+matrixnetwork=[];
+for i in 1:k
+push!(matrixnetwork,randn(ComplexF64,d,d));
+end;
+
+pp=10;
+
+function(matrixnetwork)
+testbottomeigenvector=deepcopy(bottomeigenvector);
+testtopeigenvector=deepcopy(topeigenvector);
+
+for jar in 1:pp
+newtestbottomeigenvector=testbottomeigenvector*0;
+
+for iar in 1:k
+newtestbottomeigenvector=newtestbottomeigenvector+matrixnetwork[iar]*testbottomeigenvector*adjoint(matrixnetwork[iar]);
+end;
+testbottomeigenvector=newtestbottomeigenvector;
+newtesttopeigenvector=testtopeigenvector*0;
+for i in 1:n
+for jj in 1:k
+newtesttopeigenvector[i]=newtesttopeigenvector[i]+matrixnetwork[jj]*testtopeigenvector[pairtable[jj][i]]
+end;
+end;
+testtopeigenvector=newtesttopeigenvector;
+end;
+
+return norm(testtopeigenvector)^(1/pp)/norm(testbottomeigenvector)^(1/(2*pp));
+end;
+
+rate=1;
+delta=1;
+grad=[];
+for i in 1:k
+push!(grad,zeros(ComplexF64,d,d));
+end;
+
+while true 
+newbottomeigenvector=bottomeigenvector*0;
+
+for i in 1:k
+newbottomeigenvector=newbottomeigenvector+matrixnetwork[i]*bottomeigenvector*adjoint(matrixnetwork[i]);
+end;
+bottomeigenvector=newbottomeigenvector/norm(newbottomeigenvector);
+testtopeigenvector=topeigenvector*0;
+for i in 1:n
+for j in 1:k
+testtopeigenvector[i]=testtopeigenvector[i]+matrixnetwork[j]*topeigenvector[pairtable[j][i]];
+end;
+end;
+topeigenvector=testtopeigenvector/norm(testtopeigenvector);
+every=mean(topeigenvector);
+for i in 1:n
+topeigenvector[i]=topeigenvector[i]-every;
+end;
+
+newdiff=[];
+for i in 1:k 
+push!(newdiff,randn(ComplexF64,d,d));
+end;
+
+der=(f(matrixnetwork+newdiff*delta)-f(matrixnetwork))/delta;
+twoder=(f(matrixnetwork+2*newdiff*delta)-f(matrixnetwork))/(2*delta);
+
+if abs(der/twoder)>1.1 || abs(twoder/der)>1.1
+delta=delta*0.50;
+end;
+delta=delta*1.01;
+
+for ark in 1:10
+newdiff=[];
+for i in 1:k 
+push!(newdiff,randn(ComplexF64,d,d));
+end;
+
+der=(f(matrixnetwork+newdiff*delta)-f(matrixnetwork))/delta;
+grad=0.9*grad+0.1*newdiff*der;
+end;
+
+old=f(matrixnetwork);
+matrixnetwork=matrixnetwork+rate*grad;
+new=f(matrixnetwork);
+
+if old>new rate=rate*0.9; end;
+rate=rate*1.001;
+
+squag=norm.(matrixnetwork);
+
+matrixnetwork=matrixnetwork+(0.9+0.1/squag);
+display([new,rate,delta]);
+end;
