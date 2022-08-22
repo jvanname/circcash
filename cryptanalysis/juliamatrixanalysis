@@ -690,8 +690,8 @@ new=f(matrixnetwork);
 if old>new rate=rate*0.9; end;
 rate=rate*1.001;
 
-squag=norm.(matrixnetwork);
+squag=sum(norm.(matrixnetwork));
 
-matrixnetwork=matrixnetwork+(0.9+0.1/squag);
-display([new,rate,delta]);
+matrixnetwork=matrixnetwork*(0.9+0.1/squag);
+display([log(new)/log(k),rate,delta]);
 end;
