@@ -396,17 +396,36 @@ d=10;
 function gates(bit,list) list[1]=(bit+list[1]+list[2]*list[3])%2; 
 end;
 
-pairzero=[];
-pairone=[];
+p0=[];
+p1=[];
 
 for i in 1:n
 list=map(nn,i); gates(0,list); 
-push!(pairzero,invmap(shift(list)));
+push!(p0,invmap(shift(list)));
 list=map(nn,i); gates(1,list); 
-push!(pairone,invmap(shift(list)));
+push!(p1,invmap(shift(list)));
 end;
 
-pairtable=[pairzero,pairone];
+
+
+pairtable=[p0,p1];
+
+rat=3;
+
+for i in 1:(rat-1)
+newpairtable=[];
+for j in 1:length(pairtable)
+amx=[];
+amy=[];
+for k in 1:n
+push!(amx,pairtable[j][p0[k]]);
+push!(amy,pairtable[j][p1[k]]);
+end;
+push!(newpairtable,amx);
+push!(newpairtable,amy);
+end;
+pairtable=newpairtable;
+end;
 
 k=length(pairtable);
 
