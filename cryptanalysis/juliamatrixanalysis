@@ -429,12 +429,12 @@ end;
 
 k=length(pairtable);
 
-bottomeigenvector=randn(ComplexF64,d,d);
+bottomeigenvector=randn(d,d);
 bottomeigenvector=bottomeigenvector/norm(bottomeigenvector);
 
 topeigenvector=[];
 for i in 1:n
-push!(topeigenvector,randn(ComplexF64,d));
+push!(topeigenvector,randn(d));
 end;
 every=mean(topeigenvector);
 for i in 1:n
@@ -444,7 +444,7 @@ topeigenvector=topeigenvector/norm(topeigenvector);
 
 matrixnetwork=[];
 for i in 1:k
-push!(matrixnetwork,randn(ComplexF64,d,d));
+push!(matrixnetwork,randn(d,d));
 end;
 
 pp=10;
@@ -476,7 +476,7 @@ rate=1;
 delta=1;
 grad=[];
 for i in 1:k
-push!(grad,zeros(ComplexF64,d,d));
+push!(grad,zeros(d,d));
 end;
 
 while true 
@@ -500,7 +500,7 @@ end;
 
 newdiff=[];
 for i in 1:k 
-push!(newdiff,randn(ComplexF64,d,d));
+push!(newdiff,randn(d,d));
 end;
 
 der=(f(matrixnetwork+newdiff*delta)-f(matrixnetwork))/delta;
@@ -514,7 +514,7 @@ delta=delta*1.01;
 for ark in 1:10
 newdiff=[];
 for i in 1:k 
-push!(newdiff,randn(ComplexF64,d,d));
+push!(newdiff,randn(d,d));
 end;
 
 der=(f(matrixnetwork+newdiff*delta)-f(matrixnetwork))/delta;
