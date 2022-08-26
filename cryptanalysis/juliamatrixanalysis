@@ -503,6 +503,7 @@ for i in 1:k
 push!(newdiff,randn(d,d));
 end;
 
+if rand(1:10)
 der=(f(matrixnetwork+newdiff*delta)-f(matrixnetwork))/delta;
 twoder=(f(matrixnetwork+2*newdiff*delta)-f(matrixnetwork))/(2*delta);
 
@@ -510,6 +511,7 @@ if abs(der/twoder)>1.1 || abs(twoder/der)>1.1
 delta=delta*0.50;
 end;
 delta=delta*1.01;
+end;
 
 for ark in 1:10
 newdiff=[];
@@ -525,11 +527,11 @@ old=f(matrixnetwork);
 matrixnetwork=matrixnetwork+rate*grad;
 new=f(matrixnetwork);
 
-if old>new rate=rate*0.9; end;
-rate=rate*1.001;
+if old>new rate=rate*0.5; end;
+rate=rate*1.01;
 
 squag=sum(norm.(matrixnetwork));
 
 matrixnetwork=matrixnetwork*(0.9+0.1/squag);
-display([log(new)/log(k),rate,delta]);
+display([2*log(new)/log(k),rate,delta]);
 end;
