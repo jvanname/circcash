@@ -1,2 +1,427 @@
-# We shall use neural networks in Julia to measure the cryptographic security of block ciphers.
+# Here we use Julia and neural networks to compute a eigenvectors for simple block ciphers. This code is currently a proof of concept
+# showing that neural networks can be used to estimate the L_{2,d}-spectral radii for simple block ciphers. This is currently not optimized code.
+# One can optimize the code by enabling GPU computation. One can also optimize the algorithm by replacing bad logic gates with what are probably good logic gates 
+# in the circuit before the neural network instead of by replacing bad logic gates with random logic gates.
 
+using Flux,Statistics,LinearAlgebra;
+
+# Here, we shall use the convention that the keysize and messagesize are the same. And the expandedmessagesize will be larger.
+# We will simply one hot encode the possible inputs.
+
+keysize=4;
+messagesize=16;
+expandedmessagesize=80;
+expandedkeysize=2^keysize;
+
+pathnum=expandedkeysize;
+
+perm=zeros(Int64,expandedmessagesize);
+
+for i in 1:expandedmessagesize
+perm[i]=i;
+end;
+
+
+lambda=1;
+function onemodulo(x,y) return (x-1)%y+1; end;
+
+function map(n,x) list=Vector{Int64}(undef,n); for i in reverse(1:n) if x>2^(i-1) x=x-2^(i-1); list[i]=1; else list[i]=0; end; end; return list; end;
+
+function invmap(list) if length(list)==0 return 1; end;
+nn=length(list)-1
+mars=[]
+for i in 0:nn
+push!(mars,2^i)
+end;
+return 1+dot(list,mars); end;
+
+function shift(list)
+n=length(list);
+newlist=[];
+push!(newlist,list[n]);
+if n==0 return newlist; end;
+for i in 2:n push!(newlist,list[i-1]) end;
+return newlist;
+end;
+
+
+function permutebits(perm,text)
+newtext=copy(text);
+nnt=length(text);
+for iii in 1:nnt
+newtext[perm[iii]]=text[iii];
+end;
+return newtext;
+end;
+
+onehot=function(list) output=zeros(Int64,2^length(list)); output[invmap(list)]=1; return output; end;
+
+function bitencrypt(bit,text)
+newtext=shift(text);
+newtext[1]=newtext[1]+bit+newtext[4]*newtext[8]+newtext[10];
+return newtext;
+end;
+
+function encrypt(key,text)
+newtext=copy(text);
+for i in 1:keysize
+newtext=bitencrypt(key[i],newtext);
+end;
+for i in 1:messagesize
+text[i]=newtext[i];
+end;
+end;
+
+
+legend=[];
+
+for i in 1:messagesize 
+push!(legend,[0,0,0]);
+end;
+
+for i in messagesize+1:expandedmessagesize
+app=rand(1:i-2);
+bpp=rand(app+1:i-1);
+push!(legend,[1,app,bpp]);
+end;
+
+expandtext=function(perm,legend,text)
+newtext=copy(text);
+
+for i in length(text)+1:length(legend)
+if legend[i][1]==1
+push!(newtext,(newtext[legend[i][2]]+newtext[legend[i][3]])%2);
+elseif legend[i][1]==2
+push!(newtext,newtext[legend[i][2]]*newtext[legend[i][3]]);
+elseif legend[i][1]==3
+push!(newtext,newtext[legend[i][2]]*(1-newtext[legend[i][3]]));
+elseif legend[i][1]==4
+push!(newtext,(1-newtext[legend[i][2]])*newtext[legend[i][3]]);
+elseif legend[i][1]==5
+push!(newtext,(1-newtext[legend[i][2]])*(1-newtext[legend[i][3]]));
+end;
+end;
+return permutebits(perm,newtext);
+end;
+
+haha=64;
+d=4;
+pp=1;
+
+
+
+
+updateeigenvalue=function(rate,nn)
+plaintext=rand(0:1,messagesize);
+inputvector=eigenvectornet(expandtext(perm,legend,plaintext));
+
+outputvector=zeros(d);
+for i in 1:nn
+key=rand(0:1,keysize);
+ciphertext=copy(plaintext);
+encrypt(key,ciphertext);
+outputvector=outputvector+reshape(matrixnet(onehot(key)),d,d)*eigenvectornet(expandtext(perm,legend,ciphertext));
+end;
+outputvector=outputvector/nn;
+return (1-rate)*lambda+rate*norm(outputvector)/norm(inputvector);
+end;
+
+
+
+quantumident=zeros(Float32,d*d,d*d)^0;
+eigenvectornet=Chain(Dense(expandedmessagesize,haha,tanh),Dense(haha,haha,tanh),Dense(haha,d));
+
+matrixnet=Dense(expandedkeysize,d^2);
+
+function rad(x) return maximum(abs.(eigvals(x))); end;
+
+normalizationsize=10;
+
+plaintext=rand(0:1,messagesize);
+
+keydata=[];
+for i in 1:expandedkeysize
+axe=[];
+for j in 1:pp
+push!(axe,rand(0:1,keysize));
+end;
+push!(keydata,axe);
+end;
+
+function chainencrypt(keychain,text)
+nnq=length(keychain);
+for i in 1:nnq
+encrypt(keychain[i],text);
+end;
+end;
+
+function mainloss(keycipherpairs)
+realaverage=zeros(d);
+matsum=zeros(d*d,d*d);
+for i in 1:pathnum
+mak=eigenvectornet(keycipherpairs[i][pp+1]);
+for j in 1:pp
+van=reshape(matrixnet(keycipherpairs[i][j]),d,d);
+matsum=matsum+kron(van,van)/(pathnum*pp);
+mak=van*mak;
+end;
+realaverage=realaverage+mak;
+#prod(reshape.(matrixnet.(keycipherpairs[i][1]),d,d))*eigenvectornet(keycipherpairs[i][2]);
+end;
+newrealaverage=realaverage/pathnum;
+#return norm(lambda*eigenvectornet(zeros(32))-newrealaverage)^2;
+ant=eigenvectornet(keycipherpairs[1][pp+2]);
+return norm(lambda^pp*ant-newrealaverage)^2/(lambda^(2*pp)*rad(matsum));
+# For some reason, we cannot take the eigenvectornet of tans. Mutating arrays. Boo. Similar does not help either.
+end;
+
+function compposspecrad(x)
+return rad(mean(kron.(x,x))); end;
+
+normalizationtestdata=[];
+
+for i in 1:normalizationsize
+push!(normalizationtestdata,rand(0:1,messagesize));
+end;
+
+function meaneigenvectornormalizationloss(x)
+nm=length(x);
+return norm(sum(eigenvectornet.(x))/nm)^2;
+end;
+
+function varianceeigenvectornormalizationloss(x)
+nm=length(x);
+return (sum(norm.(eigenvectornet.(x)))/nm-1)^2;
+end;
+
+
+function eigenvectornormalizationloss(x)
+return meaneigenvectornormalizationloss(x)+varianceeigenvectornormalizationloss(x);
+end;
+
+
+function quantumnormalizationloss(x)
+nm=length(x);
+norm(sum(kron.(reshape.(matrixnet.(x),d,d),reshape.(matrixnet.(x),d,d)))/nm-quantumident)^2;
+end;
+
+function normalizationloss(x,y) return quantumnormalizationloss(x)+2*eigenvectornormalizationloss(y); end;
+
+function totalloss(xx)
+
+return mean(mainloss.(xx[1]))+normalizationloss(xx[2],xx[3]);
+end;
+
+#function totalloss(keycipherpairs,x,y)
+#return mainloss(keycipherpairs)+normalizationloss(x,y);
+#end;
+
+function totalloss(keycipherpairs,x,y)
+return mean(mainloss.(keycipherpairs))+normalizationloss(x,y);
+end;
+
+
+
+# The testdata will consist of one 
+# lambda will be our target eigenvalue
+
+paff=1;
+lank=1;
+
+psdisc=Flux.params(eigenvectornet,matrixnet);
+rate=0.001;
+opt = Descent(rate);
+
+prodlist=[];
+ for i in 1:expandedmessagesize
+ push!(prodlist,0.);
+ end;
+
+
+epoch=0;
+while true 
+epoch=epoch+1;
+lambda=max(lambda,0.50);
+batch=[];
+
+for ijkl in 1:1
+entourage=[];
+for wiin in 1:100
+plaintext=rand(0:1,messagesize);
+keycipherpairs=[];
+keydata=[];
+ciphertext=[];
+for i in 1:pathnum
+oldaxe=[];
+axe=[];
+for jj in 1:pp
+push!(oldaxe,map(keysize,i));
+push!(axe,onehot(oldaxe[jj]));
+end;
+newplaintext=copy(plaintext);
+chainencrypt(oldaxe,newplaintext);
+push!(axe,expandtext(perm,legend,newplaintext));
+# This line is questionable. Why does axe have pp+2 instead of pp+1 elements?
+push!(axe,expandtext(perm,legend,copy(plaintext)));
+push!(keycipherpairs,axe);
+end;
+push!(entourage,keycipherpairs);
+end;
+x=[];
+y=[];
+for i in 1:expandedkeysize
+meow=zeros(expandedkeysize);
+meow[i]=1;
+push!(x,meow);
+#push!(x,onehot(rand(0:1,keysize)));
+end;
+for i in 1:100
+push!(y,expandtext(perm,legend,rand(0:1,messagesize)));
+end;
+push!(batch,[entourage,x,y]);
+end;
+
+cats=mean(totalloss.(batch));
+Flux.train!(totalloss,psdisc,batch,opt);
+newcats=mean(totalloss.(batch));
+
+display([cats,newcats,rate,lambda]);
+if cats<newcats
+rate=rate*0.5;
+end;
+rate=rate*1.01;
+opt = Descent(rate);
+
+lambda=updateeigenvalue(0.001,100);
+
+#if cats<0.20 
+#pan=pan+1;
+#end;
+#if pan>0
+#if rand(1:1000000)==1
+#if cats>0.4
+#pan=pan-1;
+#end;
+#end;
+#end;
+
+############prodlist=[];
+############# for i in 1:expandedmessagesize
+############ push!(prodlist,0.);
+########### end;
+ for i in 1:10
+ x=expandtext(perm,legend,rand(0:1,messagesize));
+ y=eigenvectornet(x);
+ for j in messagesize+1:expandedmessagesize
+ newx=copy(x);
+ newx[j]=1-newx[j];
+ newy=eigenvectornet(newx);
+ prodlist[j]=0.9*prodlist[j]+0.1*norm(newy-y)^2;
+ end;
+ end;
+low=1000000;
+for i in messagesize+1:expandedmessagesize
+low=min(low,prodlist[i]);
+end;
+for i in messagesize+1:expandedmessagesize
+if prodlist[i]==low
+ahh=1;
+bhh=1;
+while ahh>=bhh
+ahh=rand(1:(i-1));
+bhh=rand(1:(i-1));
+end;
+legend[i]=[rand(1:5),ahh,bhh];
+display("E");
+display([i,legend[i]]);
+display("E");
+end;
+end;
+
+#$$$$$$$$$$prodlist=[];
+#$$$$$$$$$$$$for i in 1:expandedkeysize
+#push!(prodlist,0.);
+#end;
+#for i in 1:10
+#x=expandtext(matrixperm,matrixlegend,rand(0:1,keysize));
+#y=matrixnet(x);
+#for j in keysize+1:expandedkeysize
+#newx=copy(x);
+#newx[j]=1-newx[j];
+#newy=matrixnet(newx);
+#prodlist[j]+=norm(newy-y)^2;
+#end;
+#$$$$$$$$$$$$$end;
+#low=1000000;
+#for i in keysize+1:expandedkeysize
+#low=min(low,prodlist[i]);
+#end;
+#for i in keysize+1:expandedkeysize
+#if prodlist[i]==low
+#ahh=1;
+#bhh=1;
+#while ahh>=bhh
+#ahh=rand(1:(i-1));
+#bhh=rand(1:(i-1));
+#$$$$$$$$$$$$$end;
+#matrixlegend[i]=[rand(1:5),ahh,bhh];
+#display("T");
+#display([i,matrixlegend[i]]);
+#display("T");
+#end;
+#end;
+
+swappoint=rand(messagesize+1:expandedmessagesize-1);
+#$$$$$$$$$$$$#matrixswappoint=rand(keysize+1:expandedkeysize-1);
+
+if ~ (swappoint==legend[swappoint+1][2] || swappoint==legend[swappoint+1][3]) 
+
+aa=perm[swappoint];
+bb=perm[swappoint+1];
+
+perm[swappoint]=bb;
+perm[swappoint+1]=aa;
+
+aav=legend[swappoint]
+bbv=legend[swappoint+1];
+legend[swappoint]=bbv;
+legend[swappoint+1]=aav;
+
+for iio in swappoint+2:expandedmessagesize
+for jjo in 2:3
+
+if legend[iio][jjo]==swappoint
+legend[iio][jjo]=swappoint+1;
+elseif legend[iio][jjo]==swappoint+1
+legend[iio][jjo]=swappoint;
+end;
+end;
+end;
+end;
+
+########################if ~ (matrixswappoint==matrixlegend[matrixswappoint+1][2] || matrixswappoint==matrixlegend[matrixswappoint+1][3])
+
+##aa=matrixperm[matrixswappoint];
+##bb=matrixperm[matrixswappoint+1];
+
+##matrixperm[matrixswappoint]=bb;
+##matrixperm[matrixswappoint+1]=aa;
+
+##aav=matrixlegend[matrixswappoint]
+##bbv=matrixlegend[matrixswappoint+1];
+##matrixlegend[matrixswappoint]=bbv;
+##matrixlegend[matrixswappoint+1]=aav;
+
+##for iio in matrixswappoint+2:expandedkeysize
+##for jjo in 2:3
+
+##if matrixlegend[iio][jjo]==matrixswappoint
+##matrixlegend[iio][jjo]=matrixswappoint+1;
+##elseif matrixlegend[iio][jjo]==matrixswappoint+1
+##matrixlegend[iio][jjo]=matrixswappoint;
+##end;
+##end;
+##end;
+###end;
+
+end;
