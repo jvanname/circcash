@@ -38,6 +38,12 @@ Entities are encouraged to sign their statements with their Circcash private key
 
 Entities are encouraged to understand and be interested in topics such as cryptocurrency technologies, cryptography, and reversible computation according to their abilities. 
 
+## Banned entities
+
+All entities who have ever enrolled in a college or university from the state of New York are banned from participating in the development of Circcash. 
+
+All entities who have ever been affiliated with an institution with a Bio-Safety level 4 laboratory (such as Boston University) is banned from participating in the development of Circcash. This ban may be lifted once the BSL-4 lab posts cryptographic timestamps of all data on the Circcash blockchain or on another blockchain which is timestamped on the Circcash blockchain.
+
 ## Our Responsibilities
 
 Project maintainers are responsible for clarifying the standards of acceptable
