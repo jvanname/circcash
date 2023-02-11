@@ -42,7 +42,7 @@ Entities are encouraged to understand and be interested in topics such as crypto
 
 All entities who have ever enrolled in a college or university from the state of New York are banned from participating in the development of Circcash. 
 
-All entities who have ever been affiliated with an institution with a Bio-Safety level 4 laboratory (such as Boston University) is banned from participating in the development of Circcash. This ban may be lifted once the BSL-4 lab posts cryptographic timestamps of all data on the Circcash blockchain or on another blockchain which is timestamped on the Circcash blockchain.
+All entities who have ever been affiliated with an institution with a Bio-Safety level 4 laboratory (such as Boston University) is banned from participating in the development of Circcash. This ban may be lifted once the BSL-4 lab publicly and periodically posts cryptographic timestamps of all data so that all lab incidents are investigable.
 
 ## Our Responsibilities
 
