@@ -44,6 +44,8 @@ All entities who have ever enrolled in a college or university from the state of
 
 All entities who have ever been affiliated with an institution with a Bio-Safety level 4 laboratory (such as Boston University) is banned from participating in the development of Circcash. This ban may be lifted once the BSL-4 lab publicly and periodically posts cryptographic timestamps of all data so that all lab incidents are investigable.
 
+All entities who are currently affiliated with a college or university are banned from participating in the development of Circcash.
+
 ## Our Responsibilities
 
 Project maintainers are responsible for clarifying the standards of acceptable
