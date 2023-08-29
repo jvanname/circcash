@@ -27,7 +27,7 @@ Examples of unacceptable behavior by participants include:
 * Public or private harassment
 * Publishing others' private information, such as a physical or electronic
  address, without explicit permission
-* Participating in hateful or offensive forums such as the unofficial Circcash server on Discord created on 11/14/2020 or the Circcashchat Telegram group on QuickMythril
+* Participating in hateful or offensive forums
 * Other conduct which could reasonably be considered inappropriate in a professional setting
 
 ## Recommended behavior (these are simply recommendations; entities will not be pressured into following these guidelines)
