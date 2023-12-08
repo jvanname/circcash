@@ -18,7 +18,7 @@ include:
 * Being respectful of differing viewpoints and experiences
 * Focusing on what is best for the community
 * Showing empathy towards other community members
-* Communicate clearly using proper grammar, spelling, punctuation, and capitalization
+* Make a good effort to communicate clearly using proper grammar, spelling, punctuation, and capitalization
 
 Examples of unacceptable behavior by participants include:
 
