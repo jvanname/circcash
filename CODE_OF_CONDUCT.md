@@ -40,7 +40,7 @@ Entities are encouraged to understand and be interested in topics such as crypto
 
 ## Banned entities
 
-Due to unprofessionalism and/or the promotion of violence, all entities who have ever enrolled in a CUNY, SUNY, Notre Dame University (or any other academic institution caught promoting violence) are banned from participating in the development of Circcash.
+Due to unprofessionalism and/or the promotion of violence, all entities who have ever enrolled in a CUNY, SUNY, Notre Dame University (or any other academic institution openly caught promoting violence) are banned from participating in the development of Circcash.
 
 All entities who have ever been affiliated with an institution with a Bio-Safety level 4 laboratory (such as Boston University) is banned from participating in the development of Circcash. This ban may be lifted once the BSL-4 lab publicly and periodically posts cryptographic timestamps of all data so that all lab incidents are investigable.
 
