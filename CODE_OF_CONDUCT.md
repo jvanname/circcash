@@ -44,7 +44,7 @@ Due to unprofessionalism and/or the promotion of violence, all entities who have
 
 All entities who have ever been affiliated with an institution with a Bio-Safety level 4 laboratory (such as Boston University) is banned from participating in the development of Circcash. This ban may be lifted once the BSL-4 labs implement Circcash's protocol for bio-safety.
 
-All entities who are currently affiliated with a college or university are banned from participating in the development of Circcash. Furthermore, we refuse to recognize any degree from any college or university since these academic institutions promote violence.
+All entities who are currently affiliated with a college or university are banned from participating in the development of Circcash. Furthermore, we refuse to recognize any degree/position from/at any college or university since these academic institutions promote violence.
 
 Academic institutions that have been openly caught promoting violence include Harvard University, the Massachusetts Institute of Technology, and the University of Pennsylvania.
 
