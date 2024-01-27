@@ -32,21 +32,15 @@ Examples of unacceptable behavior by participants include:
 
 ## Recommended behavior (these are simply recommendations; entities will not be pressured into following these guidelines)
 
-Entities are encouraged to use their real names and identities. Anonymous users are more likely to misbehave, and all actions taken by anonymous entities will be viewed with suspicion.
+Entities are encouraged to use their real names and identities. Anonymous users are more likely to misbehave, and actions taken by anonymous entities may be viewed with suspicion.
 
 Entities are encouraged to sign their statements with their Circcash private keys using their Circcash wallets.
 
-Entities are encouraged to understand and be interested in topics such as cryptocurrency technologies, cryptography, and reversible computation according to their abilities. 
+Entities are encouraged to understand and be interested in topics such as cryptocurrency technologies, cryptography, artificial intelligence, and reversible computation according to their abilities. 
 
 ## Banned entities
 
-Due to unprofessionalism and/or the promotion of violence, all entities who have ever enrolled in CUNY, SUNY, or Notre Dame University (or any other academic institution openly caught promoting violence) are banned from participating in the development of Circcash.
-
-All entities who have ever been affiliated with an institution with a Bio-Safety level 4 laboratory (such as Boston University) is banned from participating in the development of Circcash. This ban may be lifted once the BSL-4 labs implement Circcash's protocol for bio-safety.
-
-All entities who are currently affiliated with a college or university are banned from participating in the development of Circcash. Furthermore, we refuse to recognize any degree/position from/at any college or university since these academic institutions promote violence.
-
-Academic institutions that have been openly caught promoting violence include Harvard University, the Massachusetts Institute of Technology, and the University of Pennsylvania.
+Institutions that promote violence are banned from contributing to the development of Circcash.
 
 ## Our Responsibilities
 
